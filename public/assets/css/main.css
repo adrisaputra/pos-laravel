@@ -210,7 +210,7 @@ span.red {
   letter-spacing: 1px;
   /* height: calc(1.3em + 1.3rem + 1px); */
   padding: .75rem 1.25rem;
-  border-radius: 6px; }
+  border-radius: 4px; }
   .form-control[type="range"] {
     padding: 0; }
   .form-control:focus {

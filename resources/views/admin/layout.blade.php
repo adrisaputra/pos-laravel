@@ -13,7 +13,7 @@
     <script src="{{ asset('assets/js/loader.js') }}"></script>
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,600,700&display=swap" rel="stylesheet">
-    <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('bootstrap/css/bootstrap.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/plugins.css') }}" rel="stylesheet" type="text/css" />
     <!-- END GLOBAL MANDATORY STYLES -->
 
@@ -31,6 +31,27 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/select2/select2.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/elements/alert.css') }}">
     <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+
+    <script>
+			
+        function formatRupiah(objek, separator) {
+                a = objek.value;
+                b = a.replace(/[^\d]/g,"");
+                c = "";
+                panjang = b.length;
+                j = 0;
+                for (i = panjang; i > 0; i--) {
+                j = j + 1;
+                if (((j % 3) == 1) && (j != 1)) {
+                    c = b.substr(i-1,1) + separator + c;
+                } else {
+                    c = b.substr(i-1,1) + c;
+                }
+                }
+                objek.value = c;
+        }
+            
+    </script>
 
 </head>
 <body class="sidebar-noneoverflow">
@@ -146,8 +167,8 @@
                             </div>
                         </a>
                     </li>
-                    <li class="menu {{ (request()->is('pengaduan_masuk*')||request()->is('pengaduan_di_proses*')||request()->is('pengaduan_selesai_di_proses*')||request()->is('pengaduan_tidak_di_proses*')) ? 'active' : '' }}">
-                        <a href="#components" data-toggle="collapse" aria-expanded="{{ (request()->is('pengaduan_masuk*')||request()->is('pengaduan_di_proses*')||request()->is('pengaduan_selesai_di_proses*')||request()->is('pengaduan_tidak_di_proses*')) ? 'true' : '' }}" class="dropdown-toggle">
+                    <li class="menu {{ (request()->is('barang*')||request()->is('kategori*')||request()->is('satuan*')) ? 'active' : '' }}">
+                        <a href="#components" data-toggle="collapse" aria-expanded="{{ (request()->is('barang*')||request()->is('kategori*')||request()->is('satuan*')) ? 'true' : '' }}" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
                                 <span>Produk</span>
@@ -156,15 +177,15 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
                             </div>
                         </a>
-                        <ul class="collapse submenu list-unstyled {{ (request()->is('pengajuan_masuk*')||request()->is('pengajuan_di_proses*')||request()->is('pengajuan_di_perbaiki*')||request()->is('pengajuan_selesai_di_proses*')||request()->is('pengajuan_tidak_di_proses*')) ? 'show' : '' }}" id="components" data-parent="#accordionExample">
-                            <li class="{{ (request()->is('pengajuan_masuk*')) ? 'active' : '' }}">
-                                <a href="{{ url('/pengajuan_masuk') }}"> Barang </a>
+                        <ul class="collapse submenu list-unstyled {{ (request()->is('barang*')||request()->is('kategori*')||request()->is('satuan*')) ? 'show' : '' }}" id="components" data-parent="#accordionExample">
+                            <li class="{{ (request()->is('barang*')) ? 'active' : '' }}">
+                                <a href="{{ url('/barang') }}"> Barang </a>
                             </li>
-                            <li class="{{ (request()->is('pengajuan_masuk*')) ? 'active' : '' }}">
-                                <a href="{{ url('/pengajuan_masuk') }}"> Kategori </a>
+                            <li class="{{ (request()->is('kategori*')) ? 'active' : '' }}">
+                                <a href="{{ url('/kategori') }}"> Kategori </a>
                             </li>
-                            <li class="{{ (request()->is('pengajuan_di_proses*')) ? 'active' : '' }}">
-                                <a href="{{ url('/pengajuan_di_proses') }}"> Satuan </a>
+                            <li class="{{ (request()->is('satuan*')) ? 'active' : '' }}">
+                                <a href="{{ url('/satuan') }}"> Satuan </a>
                             </li>
                         </ul>
                     </li>
@@ -257,7 +278,6 @@
     <!-- END GLOBAL MANDATORY SCRIPTS -->
 
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
-    <script src="{{ asset('plugins/apex/apexcharts.min.js') }}"></script>
     <script src="{{ asset('plugins/select2/select2.min.js') }}"></script>
     <script src="{{ asset('plugins/select2/custom-select2.js') }}"></script>
     <script src="{{ asset('assets/js/dashboard/dash_1.js') }}"></script>

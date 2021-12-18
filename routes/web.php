@@ -7,6 +7,9 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PengaturanController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\SatuanController;
+use App\Http\Controllers\BarangController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -52,6 +55,33 @@ Route::post('/logout-sistem', [LoginController::class, 'logout']);
     Route::get('/supplier/edit/{supplier}', [SupplierController::class, 'edit']);
     Route::put('/supplier/edit/{supplier}', [SupplierController::class, 'update']);
     Route::get('/supplier/hapus/{supplier}',[SupplierController::class, 'delete']);
+
+    ## Kategori
+    Route::get('/kategori', [KategoriController::class, 'index']);
+    Route::get('/kategori/search', [KategoriController::class, 'search']);
+    Route::get('/kategori/create', [KategoriController::class, 'create']);
+    Route::post('/kategori', [KategoriController::class, 'store']);
+    Route::get('/kategori/edit/{kategori}', [KategoriController::class, 'edit']);
+    Route::put('/kategori/edit/{kategori}', [KategoriController::class, 'update']);
+    Route::get('/kategori/hapus/{kategori}',[KategoriController::class, 'delete']);
+
+    ## Satuan
+    Route::get('/satuan', [SatuanController::class, 'index']);
+    Route::get('/satuan/search', [SatuanController::class, 'search']);
+    Route::get('/satuan/create', [SatuanController::class, 'create']);
+    Route::post('/satuan', [SatuanController::class, 'store']);
+    Route::get('/satuan/edit/{satuan}', [SatuanController::class, 'edit']);
+    Route::put('/satuan/edit/{satuan}', [SatuanController::class, 'update']);
+    Route::get('/satuan/hapus/{satuan}',[SatuanController::class, 'delete']);
+
+    ## Barang
+    Route::get('/barang', [BarangController::class, 'index']);
+    Route::get('/barang/search', [BarangController::class, 'search']);
+    Route::get('/barang/create', [BarangController::class, 'create']);
+    Route::post('/barang', [BarangController::class, 'store']);
+    Route::get('/barang/edit/{barang}', [BarangController::class, 'edit']);
+    Route::put('/barang/edit/{barang}', [BarangController::class, 'update']);
+    Route::get('/barang/hapus/{barang}',[BarangController::class, 'delete']);
 
     ## Profil
     Route::get('/profil', [ProfilController::class, 'index']);
