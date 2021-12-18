@@ -9,5 +9,5 @@ class Profil extends Model
 {
     // use HasFactory;
 	protected $table = 'profil_tbl';
-	protected $fillable = ['nama_dinas','alamat','telp','email'];
+	protected $fillable = ['nama_toko','alamat','telp','email'];
 }

@@ -2,58 +2,6 @@
 <html lang="en">
 @php 
     $pengaturan = DB::table('pengaturan_tbl')->find(1);
-
-    if(Auth::user()->group==14){
-        $pengajuan_masuk =  DB::table('pengajuan_tbl')
-                            ->where(function ($query) {
-                                    $query->where('status', 0)
-                                        ->orWhere('status', 5);
-                                })
-                            ->where('user_id',Auth::user()->id)
-                            ->where('status_hapus',0)
-                            ->count();
-        $pengajuan_di_proses =  DB::table('pengajuan_tbl')
-                                ->where('status',1)
-                                ->where('user_id',Auth::user()->id)
-                                ->where('status_hapus',0)
-                                ->count();
-        $pengajuan_di_perbaiki =  DB::table('pengajuan_tbl')
-                                ->where('status',2)
-                                ->where('user_id',Auth::user()->id)
-                                ->where('status_hapus',0)
-                                ->count();
-        $pengajuan_selesai_di_proses =  DB::table('pengajuan_tbl')
-                                        ->where('status',3)
-                                        ->where('user_id',Auth::user()->id)
-                                        ->where('status_hapus',0)
-                                        ->count();
-    } else {
-        $pengajuan_masuk =  DB::table('pengajuan_tbl')
-                            ->where(function ($query) {
-                                    $query->where('status', 0)
-                                        ->orWhere('status', 5);
-                                })
-                            ->where('eksekutor',Auth::user()->group)
-                            ->where('status_hapus',0)
-                            ->count();
-        $pengajuan_di_proses =  DB::table('pengajuan_tbl')
-                                ->where('status',1)
-                                ->where('eksekutor',Auth::user()->group)
-                                ->where('status_hapus',0)
-                                ->count();
-        $pengajuan_di_perbaiki =  DB::table('pengajuan_tbl')
-                                ->where('status',2)
-                                ->where('eksekutor',Auth::user()->group)
-                                ->where('status_hapus',0)
-                                ->count();
-        $pengajuan_selesai_di_proses =  DB::table('pengajuan_tbl') 
-                                        ->where('status',3)
-                                        ->where('eksekutor',Auth::user()->group)
-                                        ->where('status_hapus',0)
-                                        ->count();
-    } 
-
-    $konfirmasi_pengaju = DB::table('users')->where('status',2)->count();
 @endphp
 <head>
     <meta charset="utf-8">
@@ -190,96 +138,63 @@
                             </div>
                         </a>
                     </li>
-
+                    <li class="menu {{ (request()->is('supplier*')) ? 'active' : '' }}">
+                        <a href="{{ url('/supplier') }}" aria-expanded="{{ (request()->is('supplier*')) ? 'true' : '' }}" class="dropdown-toggle">
+                            <div class="">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+                                <span>Supplier</span>
+                            </div>
+                        </a>
+                    </li>
                     <li class="menu {{ (request()->is('pengaduan_masuk*')||request()->is('pengaduan_di_proses*')||request()->is('pengaduan_selesai_di_proses*')||request()->is('pengaduan_tidak_di_proses*')) ? 'active' : '' }}">
                         <a href="#components" data-toggle="collapse" aria-expanded="{{ (request()->is('pengaduan_masuk*')||request()->is('pengaduan_di_proses*')||request()->is('pengaduan_selesai_di_proses*')||request()->is('pengaduan_tidak_di_proses*')) ? 'true' : '' }}" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-                                <span>Pengajuan</span>
-                                @php
-                                    $total = $pengajuan_masuk+$pengajuan_di_proses+$pengajuan_di_perbaiki+$pengajuan_selesai_di_proses;
-                                @endphp
-
-                                @if($total>0)
-                                    <span class='badge badge-danger counter'>{{ $total }}</span>
-                                @endif
-                                
+                                <span>Produk</span>
                             </div>
                             <div>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
                             </div>
                         </a>
-                        @if( Auth::user()->group==14 )
-                            <ul class="collapse submenu list-unstyled {{ (request()->is('pengajuan_masuk*')||request()->is('pengajuan_di_proses*')||request()->is('pengajuan_di_perbaiki*')||request()->is('pengajuan_selesai_di_proses*')||request()->is('pengajuan_tidak_di_proses*')) ? 'show' : '' }}" id="components" data-parent="#accordionExample">
-                                <li class="{{ (request()->is('pengajuan_masuk*')) ? 'active' : '' }}">
-                                    <a href="{{ url('/pengajuan_masuk') }}"> Terkirim 
-                                        @if($pengajuan_masuk>0)
-                                            <span class='badge badge-danger counter'>{{ $pengajuan_masuk }}</span>
-                                        @endif 
-                                    </a>
-                                </li>
-                                <li class="{{ (request()->is('pengajuan_di_proses*')) ? 'active' : '' }}">
-                                    <a href="{{ url('/pengajuan_di_proses') }}"> Sedang Di Proses  
-                                        @if($pengajuan_di_proses>0)
-                                            <span class='badge badge-danger counter'>{{ $pengajuan_di_proses }}</span>
-                                        @endif 
-                                    </a>
-                                </li>
-                                <li class="{{ (request()->is('pengajuan_di_perbaiki*')) ? 'active' : '' }}">
-                                    <a href="{{ url('/pengajuan_di_perbaiki') }}"> Perbaiki Pengajuan
-                                        @if($pengajuan_di_perbaiki>0)
-                                            <span class='badge badge-danger counter'>{{ $pengajuan_di_perbaiki }}</span>
-                                        @endif 
-                                    </a>
-                                </li>
-                                <li class="{{ (request()->is('pengajuan_selesai_di_proses*')) ? 'active' : '' }}">
-                                    <a href="{{ url('/pengajuan_selesai_di_proses') }}"> Selesai Di Proses
-                                        @if($pengajuan_selesai_di_proses>0)
-                                            <span class='badge badge-danger counter'>{{ $pengajuan_selesai_di_proses }}</span>
-                                        @endif 
-                                    </a>
-                                </li>
-                                <li class="{{ (request()->is('pengajuan_tidak_di_proses*')) ? 'active' : '' }}">
-                                    <a href="{{ url('/pengajuan_tidak_di_proses') }}"> Tidak Di Proses</a>
-                                </li>
-                            </ul>
-                        @else
-                            <ul class="collapse submenu list-unstyled {{ (request()->is('pengajuan_masuk*')||request()->is('pengajuan_di_proses*')||request()->is('pengajuan_di_perbaiki*')||request()->is('pengajuan_selesai_di_proses*')||request()->is('pengajuan_tidak_di_proses*')) ? 'show' : '' }}" id="components" data-parent="#accordionExample">
-                                <li class="{{ (request()->is('pengajuan_masuk*')) ? 'active' : '' }}">
-                                    <a href="{{ url('/pengajuan_masuk') }}"> Masuk  
-                                        @if($pengajuan_masuk>0)
-                                            <span class='badge badge-danger counter'>{{ $pengajuan_masuk }}</span>
-                                        @endif 
-                                    </a>
-                                </li>
-                                <li class="{{ (request()->is('pengajuan_di_proses*')) ? 'active' : '' }}">
-                                    <a href="{{ url('/pengajuan_di_proses') }}"> Di Proses  
-                                        @if($pengajuan_di_proses>0)
-                                            <span class='badge badge-danger counter'>{{ $pengajuan_di_proses }}</span>
-                                        @endif 
-                                    </a>
-                                </li>
-                                <li class="{{ (request()->is('pengajuan_di_perbaiki*')) ? 'active' : '' }}">
-                                    <a href="{{ url('/pengajuan_di_perbaiki') }}"> Sedang Di Perbaiki 
-                                        @if($pengajuan_di_perbaiki>0)
-                                            <span class='badge badge-danger counter'>{{ $pengajuan_di_perbaiki }}</span>
-                                        @endif 
-                                    </a>
-                                </li>
-                                <li class="{{ (request()->is('pengajuan_selesai_di_proses*')) ? 'active' : '' }}">
-                                    <a href="{{ url('/pengajuan_selesai_di_proses') }}"> Selesai Di Proses 
-                                        @if($pengajuan_selesai_di_proses>0)
-                                            <span class='badge badge-danger counter'>{{ $pengajuan_selesai_di_proses }}</span>
-                                        @endif 
-                                    </a>
-                                </li>
-                                <li class="{{ (request()->is('pengajuan_tidak_di_proses*')) ? 'active' : '' }}">
-                                    <a href="{{ url('/pengajuan_tidak_di_proses') }}"> Tidak Di Proses</a>
-                                </li>
-                            </ul>
-                        @endif
+                        <ul class="collapse submenu list-unstyled {{ (request()->is('pengajuan_masuk*')||request()->is('pengajuan_di_proses*')||request()->is('pengajuan_di_perbaiki*')||request()->is('pengajuan_selesai_di_proses*')||request()->is('pengajuan_tidak_di_proses*')) ? 'show' : '' }}" id="components" data-parent="#accordionExample">
+                            <li class="{{ (request()->is('pengajuan_masuk*')) ? 'active' : '' }}">
+                                <a href="{{ url('/pengajuan_masuk') }}"> Barang </a>
+                            </li>
+                            <li class="{{ (request()->is('pengajuan_masuk*')) ? 'active' : '' }}">
+                                <a href="{{ url('/pengajuan_masuk') }}"> Kategori </a>
+                            </li>
+                            <li class="{{ (request()->is('pengajuan_di_proses*')) ? 'active' : '' }}">
+                                <a href="{{ url('/pengajuan_di_proses') }}"> Satuan </a>
+                            </li>
+                        </ul>
                     </li>
-
+                    <li class="menu {{ (request()->is('pengaduan_masuk*')||request()->is('pengaduan_di_proses*')||request()->is('pengaduan_selesai_di_proses*')||request()->is('pengaduan_tidak_di_proses*')) ? 'active' : '' }}">
+                        <a href="#components" data-toggle="collapse" aria-expanded="{{ (request()->is('pengaduan_masuk*')||request()->is('pengaduan_di_proses*')||request()->is('pengaduan_selesai_di_proses*')||request()->is('pengaduan_tidak_di_proses*')) ? 'true' : '' }}" class="dropdown-toggle">
+                            <div class="">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                                <span>Transaksi</span>
+                            </div>
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </div>
+                        </a>
+                        <ul class="collapse submenu list-unstyled {{ (request()->is('pembelian*')||request()->is('retur*')) ? 'show' : '' }}" id="components" data-parent="#accordionExample">
+                            <li class="{{ (request()->is('pembelian*')) ? 'active' : '' }}">
+                                <a href="{{ url('/pembelian') }}"> Pembelian </a>
+                            </li>
+                            <li class="{{ (request()->is('retur*')) ? 'active' : '' }}">
+                                <a href="{{ url('/retur') }}"> Retur Barang </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="menu {{ (request()->is('kasir*')) ? 'active' : '' }}">
+                        <a href="{{ url('/kasir') }}" aria-expanded="{{ (request()->is('kasir*')) ? 'true' : '' }}" class="dropdown-toggle">
+                            <div class="">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+                                <span>Kasir</span>
+                            </div>
+                        </a>
+                    </li>
                     @if (Auth::user()->group==1)
                     <li class="menu menu-heading">
                         <div class="heading"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg><span>PENGATURAN</span></div>
@@ -288,22 +203,10 @@
                         <a href="{{ url('/profil') }}" aria-expanded="{{ (request()->is('profil*')) ? 'true' : '' }}" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
-                                <span>Profil Kantor</span>
+                                <span>Profil</span>
                             </div>
                         </a>
                     </li>
-
-                    <li class="menu {{ (request()->is('pengaju*')) ? 'active' : '' }}">
-                        <a href="{{ url('/pengaju') }}" aria-expanded="{{ (request()->is('pengaju*')) ? 'true' : '' }}" class="dropdown-toggle">
-                            <div class="">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                                <span>Pengaju</span>
-                            </div>
-                        </a>
-                    </li>
-                    @endif
-
-                    @if (Auth::user()->group==1)
                     <li class="menu {{ (request()->is('user*')) ? 'active' : '' }}">
                         <a href="{{ url('/user') }}" aria-expanded="{{ (request()->is('user*')) ? 'true' : '' }}" class="dropdown-toggle">
                             <div class="">
@@ -326,7 +229,7 @@
 
         <div class="footer-wrapper">
                 <div class="footer-section f-section-1">
-                    <p class="">Copyright © 2021 <a href="#">Kecamatan Kabaena Barat </p>
+                    <p class="">Copyright © 2021 <a href="#"> </p>
                 </div>
                 <!-- <div class="footer-section f-section-2">
                     <p class="">Coded with <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></p>

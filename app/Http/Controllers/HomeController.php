@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pengajuan;   //nama model
-use App\Models\Layanan;   //nama model
 use App\Models\User;   //nama model
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB; //untuk membuat query di controller
@@ -21,20 +19,7 @@ class HomeController extends Controller
         if(Auth::user()->group==1){
             
             $user = User::count();
-            $pengajuan = Pengajuan::where('status_hapus',0)->count();
-            $pengajuan_masuk = Pengajuan::where(function ($query) {
-                                    $query->where('status', 0)
-                                        ->orWhere('status', 5);
-                                })->where('status_hapus',0)->count();
-            $pengajuan_di_proses = Pengajuan::where('status',1)->where('status_hapus',0)->count();
-            $pengajuan_di_perbaiki = Pengajuan::where('status',2)->where('status_hapus',0)->count();
-            $pengajuan_selesai_di_proses = Pengajuan::
-                                            where(function ($query) {
-                                                $query->where('status', 3)
-                                                    ->orWhere('status', 6);
-                                            })->where('status_hapus',0)->count();
-            $pengajuan_tidak_di_proses = Pengajuan::where('status',4)->where('status_hapus',0)->count();
-            return view('admin.beranda', compact('user','pengajuan','pengajuan_masuk','pengajuan_di_proses','pengajuan_di_perbaiki','pengajuan_selesai_di_proses','pengajuan_tidak_di_proses'));
+            return view('admin.beranda', compact('user'));
         
         } else if(Auth::user()->group==14){
 

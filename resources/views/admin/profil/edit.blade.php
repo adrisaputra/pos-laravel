@@ -20,10 +20,10 @@
                             <input type="hidden" name="_method" value="PUT">
 	
 								<div class="form-group row mb-4">
-									<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">Nama Dinas</label>
+									<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">Nama Toko</label>
 									<div class="col-xl-9 col-lg-9 col-sm-10">
-										<input type="text" class="form-control" name="nama_dinas" value="{{ $profil->nama_dinas }}">
-										@if ($errors->has('nama_dinas')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('nama_dinas') }}</div>@endif
+										<input type="text" class="form-control" name="nama_toko" value="{{ $profil->nama_toko }}">
+										@if ($errors->has('nama_toko')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('nama_toko') }}</div>@endif
 									</div>
 								</div>
 								

@@ -19,35 +19,33 @@
 								{{ csrf_field() }}
 									
 									<div class="form-group row mb-4">
-										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">Nama Layanan  <span class="required" style="color: #dd4b39;">*</span></label>
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">Nama Supplier  <span class="required" style="color: #dd4b39;">*</span></label>
 										<div class="col-xl-9 col-lg-9 col-sm-10">
-											<input type="text" class="form-control" name="nama_layanan" value="{{ old('nama_layanan') }}">
-											@if ($errors->has('nama_layanan')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('nama_layanan') }}</div>@endif
+											<input type="text" class="form-control" name="nama_supplier" value="{{ old('nama_supplier') }}">
+											@if ($errors->has('nama_supplier')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('nama_supplier') }}</div>@endif
 										</div>
 									</div>
 									
 									<div class="form-group row mb-4">
-										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">Keterangan  <span class="required" style="color: #dd4b39;">*</span></label>
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">Telepon</label>
 										<div class="col-xl-9 col-lg-9 col-sm-10">
-											<input type="text" class="form-control" name="keterangan" value="{{ old('keterangan') }}">
-											@if ($errors->has('keterangan')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('keterangan') }}</div>@endif
+											<input type="text" class="form-control" name="telepon" value="{{ old('telepon') }}">
+											@if ($errors->has('telepon')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('telepon') }}</div>@endif
+										</div>
+									</div>
+									<div class="form-group row mb-4">
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">Alamat</label>
+										<div class="col-xl-9 col-lg-9 col-sm-10">
+											<input type="text" class="form-control" name="alamat" value="{{ old('alamat') }}">
+											@if ($errors->has('alamat')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('alamat') }}</div>@endif
 										</div>
 									</div>
 									
 									<div class="form-group row mb-4">
-										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">Persyaratan  <span class="required" style="color: #dd4b39;">*</span></label>
+										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">Deskripsi</label>
 										<div class="col-xl-9 col-lg-9 col-sm-10">
-											<textarea class="form-control" id="konten" name="persyaratan">{{ old('persyaratan') }}</textarea>
-											@if ($errors->has('persyaratan')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('persyaratan') }}</div>@endif
-										</div>
-									</div>
-									
-									<div class="form-group row mb-4">
-										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">{{ __('Gambar') }}  <span class="required" style="color: #dd4b39;">*</span></label>
-										<div class="col-xl-9 col-lg-9 col-sm-10">
-											<input type="file" class="form-control" placeholder="Gambar" name="gambar">
-											<span style="font-size:11px"><i>Ukuran File Tidak Boleh Lebih Dari 500 Kb (jpg,jpeg,png)</i></span>
-											@if ($errors->has('gambar')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('gambar') }}</div>@endif
+											<textarea class="form-control" name="deskripsi">{{ old('deskripsi') }}</textarea>
+											@if ($errors->has('deskripsi')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('deskripsi') }}</div>@endif
 										</div>
 									</div>
 									

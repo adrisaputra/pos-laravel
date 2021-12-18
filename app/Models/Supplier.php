@@ -5,13 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Skm extends Model
+class Supplier extends Model
 {
-    // use HasFactory;
-	protected $table = 'skm_tbl';
+     // use HasFactory;
+	protected $table = 'supplier_tbl';
 	protected $fillable =[
-        'nik',
-        'skm',
+        'nama_supplier',
+        'telepon',
+        'alamat',
+        'deskripsi',
         'user_id'
     ];
+
 }

@@ -36,7 +36,7 @@ class ProfilController extends Controller
     public function update(Request $request, Profil $profil)
     {
          $this->validate($request, [
-            'nama_dinas' => 'required',
+            'nama_toko' => 'required',
             'alamat' => 'required',
             'telp' => 'required|numeric',
             'email' => 'required'

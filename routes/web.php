@@ -1,17 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\RegistrasiController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\PengajuanController;
-use App\Http\Controllers\PengaduanController;
-use App\Http\Controllers\SkmController;
 use App\Http\Controllers\PengaturanController;
 use App\Http\Controllers\ProfilController;
-use App\Http\Controllers\LayananController;
-use App\Http\Controllers\PengajuController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -49,65 +44,14 @@ Route::post('/logout-sistem', [LoginController::class, 'logout']);
     Route::get('/', [HomeController::class, 'index']);
     Route::get('/dashboard', [HomeController::class, 'index']);
 
-    ## Pengaduan
-    Route::get('/pengaduan_masuk', [PengaduanController::class, 'index']);
-    Route::get('/pengaduan_di_proses', [PengaduanController::class, 'index']);
-    Route::get('/pengaduan_selesai_di_proses', [PengaduanController::class, 'index']);
-    Route::get('/pengaduan_tidak_di_proses', [PengaduanController::class, 'index']);
-
-    Route::get('/pengaduan_masuk/search', [PengaduanController::class, 'search']);
-    Route::get('/pengaduan_di_proses/search', [PengaduanController::class, 'search']);
-    Route::get('/pengaduan_selesai_di_proses/search', [PengaduanController::class, 'search']);
-    Route::get('/pengaduan_tidak_di_proses/search', [PengaduanController::class, 'search']);
-
-    Route::get('/pengaduan_masuk/proses/{status}/{pengaduan}', [PengaduanController::class, 'proses']);
-    Route::get('/pengaduan_di_proses/proses/{status}/{pengaduan}', [PengaduanController::class, 'proses']);
-    Route::get('/pengaduan_selesai_di_proses/proses/{status}/{pengaduan}', [PengaduanController::class, 'proses']);
-    Route::get('/pengaduan_tidak_di_proses/proses/{status}/{pengaduan}', [PengaduanController::class, 'proses']);
-
-    ## Layanan
-    Route::get('/layanan', [LayananController::class, 'index']);
-    Route::get('/layanan/search', [LayananController::class, 'search']);
-    Route::get('/layanan/create', [LayananController::class, 'create']);
-    Route::post('/layanan', [LayananController::class, 'store']);
-    Route::get('/layanan/edit/{layanan}', [LayananController::class, 'edit']);
-    Route::put('/layanan/edit/{layanan}', [LayananController::class, 'update']);
-    Route::get('/layanan/hapus/{layanan}',[LayananController::class, 'delete']);
-
-    ## Pengajuan
-    
-    Route::get('/pengajuan/create/{layanan}', [PengajuanController::class, 'create']);
-    Route::post('/pengajuan', [PengajuanController::class, 'store']);
-    Route::get('/pengajuan_di_perbaiki/perbaiki/{pengajuan}', [PengajuanController::class, 'perbaiki']);
-    Route::put('/pengajuan_di_perbaiki/perbaiki/{pengajuan}', [PengajuanController::class, 'edit_pengaju']);
-    Route::get('/pengajuan_selesai_di_proses/download/{pengajuan}', [PengajuanController::class, 'download']);
-
-    Route::get('/pengajuan_masuk', [PengajuanController::class, 'index']);
-    Route::get('/pengajuan_di_proses', [PengajuanController::class, 'index']);
-    Route::get('/pengajuan_di_perbaiki', [PengajuanController::class, 'index']);
-    Route::get('/pengajuan_selesai_di_proses', [PengajuanController::class, 'index']);
-    Route::get('/pengajuan_tidak_di_proses', [PengajuanController::class, 'index']);
-
-    Route::get('/pengajuan_masuk/search', [PengajuanController::class, 'search']);
-    Route::get('/pengajuan_di_proses/search', [PengajuanController::class, 'search']);
-    Route::get('/pengajuan_selesai_di_proses/search', [PengajuanController::class, 'search']);
-    Route::get('/pengajuan_tidak_di_proses/search', [PengajuanController::class, 'search']);
-
-    Route::put('/pengajuan_masuk/edit/{pengajuan}', [PengajuanController::class, 'edit_eksekutor']);
-    Route::put('/pengajuan_di_proses/edit/{pengajuan}', [PengajuanController::class, 'edit_eksekutor']);
-    Route::put('/pengajuan_di_perbaiki/edit/{pengajuan}', [PengajuanController::class, 'edit_eksekutor']);
-    Route::put('/pengajuan_selesai_di_proses/edit/{pengajuan}', [PengajuanController::class, 'edit_eksekutor']);
-    Route::put('/pengajuan_tidak_di_proses/edit/{pengajuan}', [PengajuanController::class, 'edit_eksekutor']);
-    
-    Route::get('/pengajuan_masuk/proses/{status}/{pengajuan}', [PengajuanController::class, 'proses']);
-    Route::get('/pengajuan_di_proses/proses/{status}/{pengajuan}', [PengajuanController::class, 'proses']);
-    Route::get('/pengajuan_di_perbaiki/proses/{status}/{pengajuan}', [PengajuanController::class, 'proses']);
-    Route::get('/pengajuan_selesai_di_proses/proses/{status}/{pengajuan}', [PengajuanController::class, 'proses']);
-    Route::get('/pengajuan_tidak_di_proses/proses/{status}/{pengajuan}', [PengajuanController::class, 'proses']);
-
-    ## SKM
-    Route::get('/skm/{skm}/{pengajuan}', [SkmController::class, 'store']);
-
+    ## Supplier
+    Route::get('/supplier', [SupplierController::class, 'index']);
+    Route::get('/supplier/search', [SupplierController::class, 'search']);
+    Route::get('/supplier/create', [SupplierController::class, 'create']);
+    Route::post('/supplier', [SupplierController::class, 'store']);
+    Route::get('/supplier/edit/{supplier}', [SupplierController::class, 'edit']);
+    Route::put('/supplier/edit/{supplier}', [SupplierController::class, 'update']);
+    Route::get('/supplier/hapus/{supplier}',[SupplierController::class, 'delete']);
 
     ## Profil
     Route::get('/profil', [ProfilController::class, 'index']);
@@ -121,15 +65,6 @@ Route::post('/logout-sistem', [LoginController::class, 'logout']);
     ## Pengaturan
     Route::get('/pengaturan', [PengaturanController::class, 'index']);
     Route::put('/pengaturan/edit/{pengaturan}', [PengaturanController::class, 'update']);
-
-    ## Pengaju
-    Route::get('/pengaju', [PengajuController::class, 'index']);
-    Route::get('/pengaju/search', [PengajuController::class, 'search']);
-    Route::get('/pengaju/create', [PengajuController::class, 'create']);
-    Route::post('/pengaju', [PengajuController::class, 'store']);
-    Route::get('/pengaju/edit/{pengaju}', [PengajuController::class, 'edit']);
-    Route::put('/pengaju/edit/{pengaju}', [PengajuController::class, 'update']);
-    Route::get('/pengaju/hapus/{pengaju}',[PengajuController::class, 'delete']);
 
     ## User
     Route::get('/user', [UserController::class, 'index']);

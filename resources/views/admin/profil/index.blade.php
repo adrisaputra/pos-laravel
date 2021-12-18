@@ -32,7 +32,7 @@
                                             <thead>
                                                 <tr>
                                                     <th style="width: 60px">No</th>
-                                                    <th>Nama Dinas</th>
+                                                    <th>Nama Toko</th>
                                                     <th>Alamat</th>
                                                     <th>Email</th>
                                                     <th>Telepon</th>
@@ -43,7 +43,7 @@
                                                 @foreach($profil as $v)
                                                     <tr>
                                                         <td>{{ ($profil ->currentpage()-1) * $profil ->perpage() + $loop->index + 1 }}</td>
-                                                        <td>{{ $v->nama_dinas }}</td>
+                                                        <td>{{ $v->nama_toko }}</td>
                                                         <td>{{ $v->alamat }}</td>
                                                         <td>{{ $v->email }}</td>
                                                         <td>{{ $v->telp }}</td>
