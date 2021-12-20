@@ -30,7 +30,10 @@ class BarangController extends Controller
     {
         $title = 'DATA BARANG';
         $barang = $request->get('search');
-        $barang = Barang::where('nama_barang', 'LIKE', '%'.$barang.'%')->orderBy('id','DESC')->paginate(25)->onEachSide(1);
+        $barang = Barang::where(function ($query) use ($barang) {
+                                $query->where('barcode', 'LIKE', '%'.$barang.'%')
+                                    ->orWhere('nama_barang', 'LIKE', '%'.$barang.'%');
+                            })->orderBy('id','DESC')->paginate(25)->onEachSide(1);
         
         if($request->input('page')){
             return view('admin.barang.index',compact('title','barang'));

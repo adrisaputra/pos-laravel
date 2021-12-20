@@ -11,6 +11,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\PembelianController;
+use App\Http\Controllers\ReturController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -94,6 +95,15 @@ Route::post('/logout-sistem', [LoginController::class, 'logout']);
     Route::get('/pembelian/edit/{pembelian}', [PembelianController::class, 'edit']);
     Route::put('/pembelian/edit/{pembelian}', [PembelianController::class, 'update']);
     Route::get('/pembelian/hapus/{pembelian}',[PembelianController::class, 'delete']);
+
+    ## Retur
+    Route::get('/retur', [ReturController::class, 'index']);
+    Route::get('/retur/search', [ReturController::class, 'search']);
+    Route::get('/retur/create', [ReturController::class, 'create']);
+    Route::post('/retur', [ReturController::class, 'store']);
+    Route::get('/retur/edit/{retur}', [ReturController::class, 'edit']);
+    Route::put('/retur/edit/{retur}', [ReturController::class, 'update']);
+    Route::get('/retur/hapus/{retur}',[ReturController::class, 'delete']);
 
     ## Profil
     Route::get('/profil', [ProfilController::class, 'index']);

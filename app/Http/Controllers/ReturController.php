@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pembelian;   //nama model
+use App\Models\Retur;   //nama model
 use App\Models\Barang;   //nama model
 use App\Models\Supplier;   //nama model
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB; //untuk membuat query di controller
 use Illuminate\Support\Facades\Auth;
 
-class PembelianController extends Controller
+class ReturController extends Controller
 {
     ## Cek Login
     public function __construct()
@@ -20,35 +20,34 @@ class PembelianController extends Controller
     ## Tampikan Data
     public function index()
     {
-        $title = 'DATA PEMBELIAN';
-        $pembelian = Pembelian::orderBy('id','DESC')->paginate(25)->onEachSide(1);
-		return view('admin.pembelian.index',compact('title','pembelian'));
+        $title = 'DATA RETUR';
+        $retur = Retur::orderBy('id','DESC')->paginate(25)->onEachSide(1);
+		return view('admin.retur.index',compact('title','retur'));
     }
 
 	## Tampilkan Data Search
 	public function search(Request $request)
     {
-        $title = 'DATA PEMBELIAN';
-        $pembelian = $request->get('search');
-        $pembelian = Pembelian::where(function ($query) use ($pembelian) {
-                                    $query->where('barcode', 'LIKE', '%'.$pembelian.'%')
-                                        ->orWhere('nama_barang', 'LIKE', '%'.$pembelian.'%');
+        $title = 'DATA RETUR';
+        $retur = $request->get('search');
+        $retur = Retur::where(function ($query) use ($retur) {
+                                    $query->where('barcode', 'LIKE', '%'.$retur.'%')
+                                        ->orWhere('nama_barang', 'LIKE', '%'.$retur.'%');
                                 })->orderBy('id','DESC')->paginate(25)->onEachSide(1);
         
         if($request->input('page')){
-            return view('admin.pembelian.index',compact('title','pembelian'));
+            return view('admin.retur.index',compact('title','retur'));
         } else {
-            return view('admin.pembelian.search',compact('title','pembelian'));
+            return view('admin.retur.search',compact('title','retur'));
         }
     }
 	
     ## Tampilkan Form Create
     public function create()
     {
-        $title = 'TAMBAH DATA PEMBELIAN';
+        $title = 'TAMBAH DATA RETUR';
         $barang = Barang::get();
-        $supplier = Supplier::get();
-		$view=view('admin.pembelian.create',compact('title','barang','supplier'));
+		$view=view('admin.retur.create',compact('title','barang'));
         $view=$view->render();
         return $view;
     }
@@ -64,7 +63,6 @@ class PembelianController extends Controller
 
 		$input['tanggal'] = $request->tanggal;
 		$input['barcode'] = $request->barcode;
-		$input['supplier_id'] = $request->supplier_id;
         
         $barang = Barang::where('barcode',$request->barcode)->first();
 		$input['nama_barang'] = $barang->nama_barang;
@@ -75,24 +73,23 @@ class PembelianController extends Controller
 		$input['catatan'] = $request->catatan;
 		$input['user_id'] = Auth::user()->id;
 		
-        Pembelian::create($input);
+        Retur::create($input);
 		
-		return redirect('/pembelian')->with('status','Data Tersimpan');
+		return redirect('/retur')->with('status','Data Tersimpan');
     }
 
     ## Tampilkan Form Edit
-    public function edit(Pembelian $pembelian)
+    public function edit(Retur $retur)
     {
-        $title = 'UBAH DATA PEMBELIAN';
+        $title = 'UBAH DATA RETUR';
         $barang = Barang::get();
-        $supplier = Supplier::get();
-        $view=view('admin.pembelian.edit', compact('title','pembelian','barang','supplier'));
+        $view=view('admin.retur.edit', compact('title','retur','barang'));
         $view=$view->render();
         return $view;
     }
 
     ## Edit Data
-    public function update(Request $request, Pembelian $pembelian)
+    public function update(Request $request, Retur $retur)
     {
         $this->validate($request, [
             'tanggal' => 'required',
@@ -100,23 +97,23 @@ class PembelianController extends Controller
             'jumlah' => 'required'
         ]);
 
-        $pembelian->fill($request->all());
+        $retur->fill($request->all());
         $barang = Barang::where('barcode',$request->barcode)->first();
-		$pembelian->nama_barang = $barang->nama_barang;
-		$pembelian->kategori_id = $barang->kategori_id;
-		$pembelian->satuan_id = $barang->satuan_id;
+		$retur->nama_barang = $barang->nama_barang;
+		$retur->kategori_id = $barang->kategori_id;
+		$retur->satuan_id = $barang->satuan_id;
         
-		$pembelian->jumlah = str_replace(".", "", $request->jumlah);
-		$pembelian->user_id = Auth::user()->id;
-    	$pembelian->save();
+		$retur->jumlah = str_replace(".", "", $request->jumlah);
+		$retur->user_id = Auth::user()->id;
+    	$retur->save();
 		
-		return redirect('/pembelian')->with('status', 'Data Berhasil Diubah');
+		return redirect('/retur')->with('status', 'Data Berhasil Diubah');
     }
 
     ## Hapus Data
-    public function delete(Pembelian $pembelian)
+    public function delete(Retur $retur)
     {
-        $pembelian->delete();
-        return redirect('/pembelian')->with('status', 'Data Berhasil Dihapus');
+        $retur->delete();
+        return redirect('/retur')->with('status', 'Data Berhasil Dihapus');
     }
 }

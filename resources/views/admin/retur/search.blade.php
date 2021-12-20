@@ -12,9 +12,9 @@
                 </tr>
             </thead>
             <tbody>
-            @foreach($pembelian as $v)
+            @foreach($retur as $v)
                 <tr>
-                    <td>{{ ($pembelian ->currentpage()-1) * $pembelian ->perpage() + $loop->index + 1 }}</td>
+                    <td>{{ ($retur ->currentpage()-1) * $retur ->perpage() + $loop->index + 1 }}</td>
                     <td>{{ $v->barcode }}</td>
                     <td>{{ $v->nama_barang }}</td>
                     <td>{{ date('d-m-Y', strtotime($v->tanggal)) }}</td>
@@ -29,6 +29,6 @@
             @endforeach
             </tbody>
         </table>
-        <div class="float-right">{{ $pembelian->appends(Request::only('search'))->links() }}</div>
+        <div class="float-right">{{ $retur->appends(Request::only('search'))->links() }}</div>
     </div>
 </div>
