@@ -5,21 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Barang extends Model
+class Pembelian extends Model
 {
       // use HasFactory;
-	protected $table = 'barang_tbl';
+	protected $table = 'pembelian_tbl';
 	protected $fillable =[
+        'tanggal',
         'barcode',
         'nama_barang',
         'kategori_id',
         'satuan_id',
-        'diskon',
-        'stok_awal',
-        'harga_beli',
-        'harga_jual',
+        'supplier_id',
+        'jumlah',
+        'catatan',
         'user_id'
     ];
 
-    
+    public function satuan()
+    {
+        return $this->belongsTo('App\Models\Satuan');
+    }
 }

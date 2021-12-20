@@ -7,6 +7,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $pengaturan->nama_aplikasi }}</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('upload/pengaturan/'.$pengaturan->logo_kecil) }}"/>
     <link href="{{ asset('assets/css/loader.css') }}" rel="stylesheet" type="text/css" />
@@ -18,6 +19,8 @@
     <!-- END GLOBAL MANDATORY STYLES -->
 
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+    <link href="{{ asset('plugins/flatpickr/flatpickr.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('plugins/flatpickr/custom-flatpickr.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('plugins/apex/apexcharts.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('assets/css/dashboard/dash_2.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('fontawesome/css/all.css') }}" rel="stylesheet" type="text/css" >
@@ -30,6 +33,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/users/account-setting.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/select2/select2.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/elements/alert.css') }}">
+<script src="{{ asset('js/jquery.js') }}"></script>
     <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
 
     <script>
@@ -189,8 +193,8 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="menu {{ (request()->is('pengaduan_masuk*')||request()->is('pengaduan_di_proses*')||request()->is('pengaduan_selesai_di_proses*')||request()->is('pengaduan_tidak_di_proses*')) ? 'active' : '' }}">
-                        <a href="#components" data-toggle="collapse" aria-expanded="{{ (request()->is('pengaduan_masuk*')||request()->is('pengaduan_di_proses*')||request()->is('pengaduan_selesai_di_proses*')||request()->is('pengaduan_tidak_di_proses*')) ? 'true' : '' }}" class="dropdown-toggle">
+                    <li class="menu {{ (request()->is('pembelian*')||request()->is('retur*')) ? 'active' : '' }}">
+                        <a href="#components2" data-toggle="collapse" aria-expanded="{{ (request()->is('pembelian*')||request()->is('retur*')) ? 'true' : '' }}" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
                                 <span>Transaksi</span>
@@ -199,7 +203,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
                             </div>
                         </a>
-                        <ul class="collapse submenu list-unstyled {{ (request()->is('pembelian*')||request()->is('retur*')) ? 'show' : '' }}" id="components" data-parent="#accordionExample">
+                        <ul class="collapse submenu list-unstyled {{ (request()->is('pembelian*')||request()->is('retur*')) ? 'show' : '' }}" id="components2" data-parent="#accordionExample">
                             <li class="{{ (request()->is('pembelian*')) ? 'active' : '' }}">
                                 <a href="{{ url('/pembelian') }}"> Pembelian </a>
                             </li>
@@ -278,6 +282,8 @@
     <!-- END GLOBAL MANDATORY SCRIPTS -->
 
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+    <script src="{{ asset('plugins/flatpickr/flatpickr.js') }}"></script>
+    <script src="{{ asset('plugins/flatpickr/custom-flatpickr.js') }}"></script>
     <script src="{{ asset('plugins/select2/select2.min.js') }}"></script>
     <script src="{{ asset('plugins/select2/custom-select2.js') }}"></script>
     <script src="{{ asset('assets/js/dashboard/dash_1.js') }}"></script>

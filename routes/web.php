@@ -10,6 +10,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\PembelianController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -73,15 +74,26 @@ Route::post('/logout-sistem', [LoginController::class, 'logout']);
     Route::get('/satuan/edit/{satuan}', [SatuanController::class, 'edit']);
     Route::put('/satuan/edit/{satuan}', [SatuanController::class, 'update']);
     Route::get('/satuan/hapus/{satuan}',[SatuanController::class, 'delete']);
+    Route::get('/satuan/get', [SatuanController::class, 'get']);
 
     ## Barang
     Route::get('/barang', [BarangController::class, 'index']);
     Route::get('/barang/search', [BarangController::class, 'search']);
+    Route::post('/barang/get', [BarangController::class, 'get']);
     Route::get('/barang/create', [BarangController::class, 'create']);
     Route::post('/barang', [BarangController::class, 'store']);
     Route::get('/barang/edit/{barang}', [BarangController::class, 'edit']);
     Route::put('/barang/edit/{barang}', [BarangController::class, 'update']);
     Route::get('/barang/hapus/{barang}',[BarangController::class, 'delete']);
+
+    ## Pembelian
+    Route::get('/pembelian', [PembelianController::class, 'index']);
+    Route::get('/pembelian/search', [PembelianController::class, 'search']);
+    Route::get('/pembelian/create', [PembelianController::class, 'create']);
+    Route::post('/pembelian', [PembelianController::class, 'store']);
+    Route::get('/pembelian/edit/{pembelian}', [PembelianController::class, 'edit']);
+    Route::put('/pembelian/edit/{pembelian}', [PembelianController::class, 'update']);
+    Route::get('/pembelian/hapus/{pembelian}',[PembelianController::class, 'delete']);
 
     ## Profil
     Route::get('/profil', [ProfilController::class, 'index']);

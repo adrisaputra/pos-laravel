@@ -13,4 +13,9 @@ class Satuan extends Model
         'nama_satuan',
         'user_id'
     ];
+
+    public function pembelian()
+    {
+        return $this->hasOne('App\Models\Pembelian');
+    }
 }

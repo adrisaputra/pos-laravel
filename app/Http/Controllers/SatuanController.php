@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Satuan;   //nama model
+use App\Models\Barang;   //nama model
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB; //untuk membuat query di controller
 use Illuminate\Support\Facades\Auth;
@@ -89,5 +90,15 @@ class SatuanController extends Controller
     {
         $satuan->delete();
         return redirect('/satuan')->with('status', 'Data Berhasil Dihapus');
+    }
+    
+	## Tampilkan Data Get
+	public function get(Request $request)
+    {
+        $barcode = $request->get('search');
+        $barang = Barang::where('barcode', $barcode)->first();
+        $satuan = Satuan::where('id', $barang->satuan_id)->first();
+        
+        echo '<div id="hasil"><input type="text" class="form-control" name="satuan" value="'.$satuan->nama_satuan.'"></div>';
     }
 }

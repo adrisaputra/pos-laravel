@@ -115,4 +115,26 @@ class BarangController extends Controller
         $barang->delete();
         return redirect('/barang')->with('status', 'Data Berhasil Dihapus');
     }
+
+	## Tampilkan Data Get
+	public function get(Request $request)
+    {
+        $barang = $request->get('search');
+        $barang = Barang::where(function ($query) use ($barang) {
+                                $query->where('barcode', 'LIKE', '%'.$barang.'%')
+                                    ->orWhere('nama_barang', 'LIKE', '%'.$barang.'%');
+                            })->orderBy('id','DESC')->limit(5)->get();
+        
+        $response = array();
+            foreach($barang as $v){
+                $response[] = array(
+                    "id"=>$v->barcode,
+                    "text"=>$v->barcode." || ".$v->nama_barang
+                );
+            }
+        
+        return response()->json($response); 
+
+    }
+	
 }
