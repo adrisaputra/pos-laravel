@@ -12,6 +12,7 @@ use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\PembelianController;
 use App\Http\Controllers\ReturController;
+use App\Http\Controllers\KasirController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -107,6 +108,16 @@ Route::post('/logout-sistem', [LoginController::class, 'logout']);
     Route::put('/retur/edit/{retur}', [ReturController::class, 'update']);
     Route::get('/retur/hapus/{retur}',[ReturController::class, 'delete']);
     Route::post('/retur/import_excel', [ReturController::class, 'import_excel']);
+
+    ## Kasir
+    Route::get('/kasir', [KasirController::class, 'index']);
+    Route::get('/kasir/search', [KasirController::class, 'search']);
+    Route::get('/kasir/create', [KasirController::class, 'create']);
+    Route::put('/kasir/edit/{kasir}', [KasirController::class, 'update']);
+    Route::post('/kasir', [KasirController::class, 'store']);
+    Route::get('/kasir/hapus/{kasir}',[KasirController::class, 'delete']);
+    Route::get('/kasir/nomor_invoice', [KasirController::class, 'nomor_invoice']);
+
 
     ## Profil
     Route::get('/profil', [ProfilController::class, 'index']);

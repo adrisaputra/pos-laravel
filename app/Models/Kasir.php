@@ -5,20 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Barang extends Model
+class Kasir extends Model
 {
-      // use HasFactory;
-	protected $table = 'barang_tbl';
+    // use HasFactory;
+	protected $table = 'transaksi_tbl';
 	protected $fillable =[
+        'nomor_invoice',
         'barcode',
         'nama_barang',
-        'kategori_id',
-        'satuan_id',
+        'harga',
+        'jumlah',
         'diskon',
-        'stok_awal',
-        'harga_beli',
-        'harga_jual',
+        'total',
+        'tanggal',
+        'waktu',
+        'status',
         'user_id'
     ];
-
 }
