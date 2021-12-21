@@ -65,29 +65,9 @@
                                                         <td>@if($v->group==1)
                                                                 <span class="badge badge-info">Administrator</span>
                                                             @elseif($v->group==2)
-                                                                <span class="badge badge-success">Kecamatan</span>
+                                                                <span class="badge badge-success">Operator</span>
                                                             @elseif($v->group==3)
-                                                                <span class="badge badge-warning">Kelurahan Sikeli</span>
-                                                            @elseif($v->group==4)
-                                                                <span class="badge badge-warning">Desa Baliara</span>
-                                                            @elseif($v->group==5)
-                                                                <span class="badge badge-warning">Desa Baliara Selatan</span>
-                                                            @elseif($v->group==6)
-                                                                <span class="badge badge-warning">Desa Baliara Kepulauan</span>
-                                                            @elseif($v->group==7)
-                                                                <span class="badge badge-warning">Desa Rahantari</span>
-                                                            @elseif($v->group==8)
-                                                                <span class="badge badge-primary">DISDUKCAPIL</span>
-                                                            @elseif($v->group==9)
-                                                                <span class="badge badge-primary">DISTRANSNAKER</span>
-                                                            @elseif($v->group==10)
-                                                                <span class="badge badge-primary">PMPTSP</span>
-                                                            @elseif($v->group==11)
-                                                                <span class="badge badge-primary">DINSOS</span>
-                                                            @elseif($v->group==12)
-                                                                <span class="badge badge-primary">BPJS Ketenagakerjaan</span>
-                                                            @elseif($v->group==13)
-                                                                <span class="badge badge-primary">BPJS Kesehatan</span>
+                                                                <span class="badge badge-warning">Kasir</span>
                                                             @endif
                                                         </td>
                                                         <td>@if($v->status==0)

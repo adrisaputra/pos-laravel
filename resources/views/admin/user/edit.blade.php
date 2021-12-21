@@ -62,18 +62,8 @@
 										<div class="col-xl-9 col-lg-9 col-sm-10">
 											<select class="form-control" name="group">
 												<option value="1" @if($user->group=="1") selected @endif>Administrator</option>
-												<option value="2" @if($user->group=="2") selected @endif>Kecamatan</option>
-												<option value="3" @if($user->group=="3") selected @endif>Kelurahan Sikeli</option>
-												<option value="4" @if($user->group=="4") selected @endif>Desa Baliara</option>
-												<option value="5" @if($user->group=="5") selected @endif>Desa Baliara Selatan</option>
-												<option value="6" @if($user->group=="6") selected @endif>Desa Baliara Kepulauan</option>
-												<option value="7" @if($user->group=="7") selected @endif>Desa Rahantari</option>
-												<option value="8" @if($user->group=="8") selected @endif>DISDUKCAPIL</option>
-												<option value="9" @if($user->group=="9") selected @endif>DISTRANSNAKER</option>
-												<option value="10" @if($user->group=="10") selected @endif>PMPTSP</option>
-												<option value="11" @if($user->group=="11") selected @endif>DINSOS</option>
-												<option value="12" @if($user->group=="12") selected @endif>BPJS Ketenagakerjaan</option>
-												<option value="13" @if($user->group=="13") selected @endif>BPJS Kesehatan</option>
+												<option value="2" @if($user->group=="2") selected @endif>Operator</option>
+												<option value="3" @if($user->group=="3") selected @endif>Kasir</option>
 											</select>
 											@if ($errors->has('group')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('group') }}</div>@endif
 										</div>

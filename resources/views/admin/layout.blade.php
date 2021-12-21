@@ -71,7 +71,7 @@
             <ul class="navbar-nav theme-brand flex-row  text-center">
                 <li class="nav-item theme-logo">
                     <a href="{{ url('/') }}">
-                        <img src="{{ asset('upload/pengaturan/'.$pengaturan->logo_kecil) }}" class="navbar-logo" alt="logo" style="max-height: 60px;width:40px">
+                        <img src="{{ asset('upload/pengaturan/'.$pengaturan->logo_kecil) }}" class="navbar-logo" alt="logo" style="max-height: 60px;width:50px">
                     </a>
                 </li>
                 <li class="nav-item theme-text">
