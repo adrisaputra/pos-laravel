@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Barang;   //nama model
 use App\Models\Kategori;   //nama model
 use App\Models\Satuan;   //nama model
+use App\Imports\BarangImport;     // Import data Pegawai
+use Maatwebsite\Excel\Facades\Excel; // Excel Library
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB; //untuk membuat query di controller
 use Illuminate\Support\Facades\Auth;
@@ -119,6 +121,28 @@ class BarangController extends Controller
         return redirect('/barang')->with('status', 'Data Berhasil Dihapus');
     }
 
+    public function import_excel(Request $request) 
+	{
+		// validasi
+		$this->validate($request, [
+			'file' => 'required|mimes:csv,xls,xlsx'
+		]);
+ 
+		// menangkap file excel
+		$file = $request->file('file');
+ 
+		// membuat nama file unik
+		$nama_file = rand().$file->getClientOriginalName();
+ 
+		// upload ke folder file_siswa di dalam folder public
+		$file->move('upload/file_barang',$nama_file);
+ 
+		// import data
+		Excel::import(new BarangImport, public_path('upload/file_barang/'.$nama_file));
+ 
+        return redirect('/barang')->with('status', 'Data Barang Berhasil Diimport');
+	}
+    
 	## Tampilkan Data Get
 	public function get(Request $request)
     {

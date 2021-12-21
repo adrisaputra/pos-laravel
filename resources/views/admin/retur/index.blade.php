@@ -20,6 +20,7 @@
 										<div class="col-xl-8 col-md-12 col-sm-12 col-12">
 										  <a href="{{ url('/'.Request::segment(1).'/create') }}" class="btn mb-2 mr-1 btn-success">Tambah Data</a>
 										  <a href="{{ url('/'.Request::segment(1)) }}" class="btn mb-2 mr-1 btn-warning">Refresh</a>
+                                          <a type="button" class="btn mb-2 mr-1 btn-info" data-toggle="modal" data-target="#exampleModal">Import Data</a>
 										</div>
 										<div class="col-xl-4 col-md-12 col-sm-12 col-12">
 											<div class="input-group" >
@@ -32,6 +33,37 @@
 									</div>
 								</div>
 							</form>
+                            
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-md" role="document">
+                                    <form method="post" action="{{ url('/'.Request::segment(1).'/import_excel') }}" enctype="multipart/form-data">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Import Data</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            {{ csrf_field() }}
+			
+                                            <label>Pilih file excel</label>
+                                            <div class="form-group">
+                                                <input type="file" name="file" required="required">
+                                            </div>
+                
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Tutup</button>
+                                            <a href="{{ asset('upload/file_retur/import_retur.xlsx') }}" class="btn btn-info">Download Format</a>
+                                            <button type="submit" class="btn btn-primary">Import</button>
+                                        </div>
+                                    </div>
+							        </form>
+                                </div>
+                            </div>
+
                             <div class="widget-content widget-content-area" style="padding-top: 0px;">
                                 
                                 @if ($message = Session::get('status'))

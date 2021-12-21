@@ -86,6 +86,7 @@ Route::post('/logout-sistem', [LoginController::class, 'logout']);
     Route::get('/barang/edit/{barang}', [BarangController::class, 'edit']);
     Route::put('/barang/edit/{barang}', [BarangController::class, 'update']);
     Route::get('/barang/hapus/{barang}',[BarangController::class, 'delete']);
+    Route::post('/barang/import_excel', [BarangController::class, 'import_excel']);
 
     ## Pembelian
     Route::get('/pembelian', [PembelianController::class, 'index']);
@@ -95,6 +96,7 @@ Route::post('/logout-sistem', [LoginController::class, 'logout']);
     Route::get('/pembelian/edit/{pembelian}', [PembelianController::class, 'edit']);
     Route::put('/pembelian/edit/{pembelian}', [PembelianController::class, 'update']);
     Route::get('/pembelian/hapus/{pembelian}',[PembelianController::class, 'delete']);
+    Route::post('/pembelian/import_excel', [PembelianController::class, 'import_excel']);
 
     ## Retur
     Route::get('/retur', [ReturController::class, 'index']);
@@ -104,6 +106,7 @@ Route::post('/logout-sistem', [LoginController::class, 'logout']);
     Route::get('/retur/edit/{retur}', [ReturController::class, 'edit']);
     Route::put('/retur/edit/{retur}', [ReturController::class, 'update']);
     Route::get('/retur/hapus/{retur}',[ReturController::class, 'delete']);
+    Route::post('/retur/import_excel', [ReturController::class, 'import_excel']);
 
     ## Profil
     Route::get('/profil', [ProfilController::class, 'index']);

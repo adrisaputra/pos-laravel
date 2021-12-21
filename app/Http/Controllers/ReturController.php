@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Retur;   //nama model
 use App\Models\Barang;   //nama model
 use App\Models\Supplier;   //nama model
+use App\Imports\ReturImport;     // Import data Pegawai
+use Maatwebsite\Excel\Facades\Excel; // Excel Library
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB; //untuk membuat query di controller
 use Illuminate\Support\Facades\Auth;
@@ -116,4 +118,26 @@ class ReturController extends Controller
         $retur->delete();
         return redirect('/retur')->with('status', 'Data Berhasil Dihapus');
     }
+
+    public function import_excel(Request $request) 
+	{
+		// validasi
+		$this->validate($request, [
+			'file' => 'required|mimes:csv,xls,xlsx'
+		]);
+ 
+		// menangkap file excel
+		$file = $request->file('file');
+ 
+		// membuat nama file unik
+		$nama_file = rand().$file->getClientOriginalName();
+ 
+		// upload ke folder file_siswa di dalam folder public
+		$file->move('upload/file_retur',$nama_file);
+ 
+		// import data
+		Excel::import(new ReturImport, public_path('upload/file_retur/'.$nama_file));
+ 
+        return redirect('/retur')->with('status', 'Data Barang Berhasil Diimport');
+	}
 }
