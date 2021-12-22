@@ -1,3 +1,4 @@
+
 <div id="hasil">
     <div class="table-responsive">
         <table class="table table-bordered table-hover mb-4">
@@ -6,29 +7,45 @@
                     <th style="width: 60px">No</th>
                     <th>Barcode</th>
                     <th>Nama Barang</th>
-                    <th>Tanggal</th>
-                    <th>Jumlah</th>
+                    <th>Harga Jual (Rp)</th>
+                    <th>Diskon (%)</th>
+                    <th>Stok</th>
                     <th style="width: 150px">Aksi</th>
                 </tr>
             </thead>
             <tbody>
-            @foreach($retur as $v)
+            @foreach($barang as $i => $v)
                 <tr>
-                    <td>{{ ($retur ->currentpage()-1) * $retur ->perpage() + $loop->index + 1 }}</td>
+                    <td>{{ $i+1 }}</td>
                     <td>{{ $v->barcode }}</td>
                     <td>{{ $v->nama_barang }}</td>
-                    <td>{{ date('d-m-Y', strtotime($v->tanggal)) }}</td>
-                    <td>{{ number_format($v->jumlah, 0, ',', '.') }}</td>
+                    <td>{{ number_format($v->harga_jual, 0, ',', '.') }}</td>
+                    <td>{{ number_format($v->diskon, 0, ',', '.') }}</td>
+                    <td>
+                    @php 
+                        $pembelian = DB::table('pembelian_tbl')
+                                    ->select(DB::raw("SUM(jumlah) as total_pembelian"))
+                                    ->where('barcode',$v->barcode)
+                                    ->first();
+                        $retur = DB::table('retur_tbl')
+                                    ->select(DB::raw("SUM(jumlah) as total_retur"))
+                                    ->where('barcode',$v->barcode)
+                                    ->first();
+                    @endphp   
+                    {{ number_format(($v->stok_awal + $pembelian->total_pembelian)-$retur->total_retur, 0, ',', '.') }}</td>
                     <td class="text-center">
                         <ul class="table-controls">
-                            <li><a href="{{ url('/'.Request::segment(1).'/edit/'.$v->id ) }}" data-toggle="tooltip" data-placement="top" title="Edit"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 text-success"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg></a></li>
-                            <li><a href="{{ url('/'.Request::segment(1).'/hapus/'.$v->id ) }}" data-toggle="tooltip" data-placement="top" title="Delete" onclick="return confirm('Anda Yakin ?');"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 text-danger"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a></li>
+                            <li>
+                            <form action="{{ url('/'.Request::segment(1)) }}" method="POST" enctype="multipart/form-data" class="form-horizontal">
+								{{ csrf_field() }}
+                                    <input type="hidden" name="barcode" value="{{ $v->barcode }}">
+                                    <button type="submit" data-toggle="tooltip" data-placement="top" title="Simpan" style="border: none;outline: none;background: none;cursor: pointer;color: #0000EE;padding: 0;text-decoration: underline;font-family: inherit;font-size: inherit;"><i class="far fa-save text-success" style="font-size:22px;"></i></button></li>
+							</form>
                         </ul>
                     </td>
                 </tr>
             @endforeach
             </tbody>
         </table>
-        <div class="float-right">{{ $retur->appends(Request::only('search'))->links() }}</div>
     </div>
 </div>

@@ -114,6 +114,7 @@ Route::post('/logout-sistem', [LoginController::class, 'logout']);
     Route::get('/kasir/search', [KasirController::class, 'search']);
     Route::get('/kasir/create', [KasirController::class, 'create']);
     Route::put('/kasir/edit/{kasir}', [KasirController::class, 'update']);
+    Route::get('/kasir/edit2/{id}/{jumlah}',[KasirController::class, 'update2']);
     Route::post('/kasir', [KasirController::class, 'store']);
     Route::get('/kasir/hapus/{kasir}',[KasirController::class, 'delete']);
     Route::get('/kasir/nomor_invoice', [KasirController::class, 'nomor_invoice']);

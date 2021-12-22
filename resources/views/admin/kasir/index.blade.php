@@ -87,28 +87,34 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
+				                            @php $total = 0; @endphp
                                             @foreach($kasir as $v)
                                                 <tr>
-                                                    <td>{{ ($kasir ->currentpage()-1) * $kasir ->perpage() + $loop->index + 1 }}</td>
-                                                    <td><b>{{ $v->barcode }}<b></td>
-                                                    <td><b>{{ $v->nama_barang }}<b></td>
-                                                    <td><b>{{ number_format($v->harga, 0, ',', '.') }}<b></td>
-                                                    <td><b>{{ number_format($v->diskon, 0, ',', '.') }}<b></td>
-                                                    <td>
+                                                    <td style="width: 5%">{{ ($kasir ->currentpage()-1) * $kasir ->perpage() + $loop->index + 1 }}</td>
+                                                    <td style="width: 10%"><b>{{ $v->barcode }}<b></td>
+                                                    <td style="width: 30%"><b>{{ $v->nama_barang }}<b></td>
+                                                    <td style="width: 15%"><b>{{ number_format($v->harga, 0, ',', '.') }}<b></td>
+                                                    <td style="width: 10%"><b>{{ number_format($v->diskon, 0, ',', '.') }}<b></td>
+                                                    <td style="width: 15%">
                                                         <form action="{{ url('/'.Request::segment(1).'/edit/'.$v->id) }}" method="POST" enctype="multipart/form-data" class="form-horizontal">
                                                         {{ csrf_field() }}
                                                         <input type="hidden" name="_method" value="PUT">
                                                             <input type="text" class="form-control" name="jumlah" value="{{ $v->jumlah }}">
                                                         </form>
                                                     </td>
-                                                    <td><b><span style="color: #ff0018;">{{ number_format($v->total, 0, ',', '.') }}</span></b></td>
-                                                    <td class="text-center">
+                                                    <td style="width: 20%"><span style="color: #ff0018;font-size:16px;"><b>{{ number_format($v->total, 0, ',', '.') }}</b></span></td>
+                                                    <td class="text-center" style="width: 5%">
                                                         <ul class="table-controls">
                                                             <li><a href="{{ url('/'.Request::segment(1).'/hapus/'.$v->id ) }}" data-toggle="tooltip" data-placement="top" title="Delete" onclick="kasirn confirm('Anda Yakin ?');"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 text-danger"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a></li>
                                                         </ul>
                                                     </td>
                                                 </tr>
+				                            @php $total =  ($v->harga *  $v->jumlah) + $total; @endphp
                                             @endforeach
+                                            <tr>
+                                                <th colspan="6"><center>TOTAL</center></th>
+                                                <th colspan="2" class="col-md-3"><span style="color: #28a745;text-align: right;font-size:18px;font-weight:bold"><b id="total_all">{{ number_format($total,0,",",".") }}</b></span></th>
+                                            </tr>
                                             </tbody>
                                         </table>
                                         <div class="float-right">{{ $kasir->appends(Request::only('search'))->links() }}</div>
@@ -120,6 +126,20 @@
                 </div>
 
             </div>
+<script>
+function convertToRupiah(angka)
+{
+
+	var rupiah = '';    
+	var angkarev = angka.toString().split('').reverse().join('');
+	
+	for(var i = 0; i < angkarev.length; i++) 
+	  if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
+	
+	return rupiah.split('',rupiah.length-1).reverse().join('');
+
+}
+</script>
 <script>
 function tampil(){
     search = document.getElementById("search").value;

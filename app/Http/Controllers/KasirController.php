@@ -20,25 +20,20 @@ class KasirController extends Controller
     public function index()
     {
         $title = 'DATA TRANSAKSI';
-        $kasir = Kasir::orderBy('id','DESC')->paginate(25)->onEachSide(1);
-		return view('admin.kasir.index',compact('title','kasir'));
+        $kasir = Kasir::whereNull('status')->orderBy('id','DESC')->get();
+		return view('admin.kasir.index2',compact('title','kasir'));
     }
 
 	## Tampilkan Data Search
 	public function search(Request $request)
     {
         $title = 'DATA TRANSAKSI';
-        $kasir = $request->get('search');
-        $kasir = Kasir::where(function ($query) use ($kasir) {
-                                    $query->where('barcode', 'LIKE', '%'.$kasir.'%')
-                                        ->orWhere('nama_barang', 'LIKE', '%'.$kasir.'%');
-                                })->orderBy('id','DESC')->paginate(25)->onEachSide(1);
-        
-        if($request->input('page')){
-            return view('admin.kasir.index',compact('title','kasir'));
-        } else {
-            return view('admin.kasir.search',compact('title','kasir'));
-        }
+        $barang = $request->get('search');
+        $barang = Barang::where(function ($query) use ($barang) {
+                                    $query->where('barcode', 'LIKE', '%'.$barang.'%')
+                                        ->orWhere('nama_barang', 'LIKE', '%'.$barang.'%');
+                                })->orderBy('id','DESC')->limit(10)->get();
+        return view('admin.kasir.search',compact('title','barang'));
     }
 	
     public function nomor_invoice(){
@@ -122,6 +117,14 @@ class KasirController extends Controller
 		return redirect('/kasir')->with('status', 'Data Berhasil Diubah');
     }
 
+    public function update2($id, $jumlah)
+    {
+        $kasir = Kasir::find($id);
+        $kasir->jumlah = $jumlah; 
+        $kasir->total = $kasir->harga * $kasir->jumlah;
+        $kasir->save();
+    }
+
     ## Hapus Data
     public function delete(Kasir $kasir)
     {
@@ -129,4 +132,4 @@ class KasirController extends Controller
         return redirect('/kasir')->with('status', 'Data Berhasil Dihapus');
     }
 
-}
+} 
