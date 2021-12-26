@@ -20,7 +20,7 @@
 								<div class="widget-content widget-content-area">
 									<div class="row">
 										<div class="col-xl-8 col-md-12 col-sm-12 col-12">
-										  <a type="button" class="btn mb-2 mr-1 btn-info" data-toggle="modal" data-target="#exampleModal">Cari Barang</a>
+										  <a type="button" class="btn mb-2 mr-1 btn-info" data-toggle="modal" data-target="#exampleModal" accesskey="=">Cari Barang</a>
 										</div>
 										<div class="col-xl-4 col-md-12 col-sm-12 col-12">
 											<div class="input-group" >
@@ -141,16 +141,16 @@
                                                         stok = document.getElementById("stok{{ $v->id }}").value;
                                                         stok = parseInt(stok);
                                                         id = document.getElementById("id{{ $v->id }}").value;
-                                                        total_all = convertToRupiah(harga * jumlah); 
-                                                        total_all2 = harga * jumlah;	
+                                                        total_keseluruhan = convertToRupiah(harga * jumlah); 
+                                                        total_keseluruhan2 = harga * jumlah;	
                                                         if(jumlah>stok){
-                                                            document.getElementById("total{{ $v->id }}").textContent=total_all;
+                                                            document.getElementById("total{{ $v->id }}").textContent=total_keseluruhan;
                                                             document.getElementById("total{{ $v->id }}").style.color='red';
                                                         } else {
-                                                            document.getElementById("total{{ $v->id }}").textContent=total_all;
+                                                            document.getElementById("total{{ $v->id }}").textContent=total_keseluruhan;
                                                             document.getElementById("total{{ $v->id }}").style.color='black';
                                                         }
-                                                        document.getElementById("qty{{ $v->id }}").value=total_all2;
+                                                        document.getElementById("qty{{ $v->id }}").value=total_keseluruhan2;
 
                                                         url = "{{ url('/kasir/edit2') }}"
                                                         $.ajax({
@@ -176,23 +176,22 @@
                                                         if(parseInt(arr[i].value))
                                                             tot += parseInt(arr[i].value);
                                                     }
-                                                    total_all = convertToRupiah(tot);
-                                                    document.getElementById('total_all').textContent = total_all;
-                                                    document.getElementById('total_all2').textContent = total_all;
+                                                    total_keseluruhan = convertToRupiah(tot);
+                                                    document.getElementById('total_keseluruhan').textContent = total_keseluruhan;
+                                                    document.getElementById('total_keseluruhan2').textContent = total_keseluruhan;
+                                                    document.getElementById('total_keseluruhan3').value = tot;
                                                 }
                                             </script>
                                             <tr>
                                                 <th colspan="6"><center>TOTAL</center></th>
-                                                <th colspan="2" class="col-md-3"><span style="color: #28a745;text-align: right;font-size:18px;font-weight:bold"><b id="total_all">{{ number_format($total,0,",",".") }}</b></span></th>
+                                                <th colspan="2" class="col-md-3" style="background-color: #28a745;" data-toggle="modal" data-target="#bayar"><span style="color: #ffffff;text-align: right;font-size:18px;font-weight:bold;"><b id="total_keseluruhan">{{ number_format($total,0,",",".") }}</b></span></th>
                                             </tr>
                                             </tbody>
                                         </table>
-                                        
-										<div align="right"><a type="button" class="btn mb-2 mr-1 btn-info" data-toggle="modal" data-target="#bayar">BAYAR</a></div>
 
                                         <!-- Modal -->
                                         <div class="modal fade" id="bayar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-dialog modal-xl" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="exampleModalLabel">BAYAR</h5>
@@ -201,21 +200,161 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                            <br>
-                                                            <table class="table table-bordered table-hover mb-4">
-                                                            <tr>
-                                                                <th><center>JENIS PEMBAYARAN</center></th>
-                                                                <th><span style="color: #28a745;text-align: right;font-size:18px;font-weight:bold"><b id="total_all2">{{ number_format($total,0,",",".") }}</b></span></th>
-                                                            </tr>
-                                                            <tr>
-                                                                <th><center>Bayar</center></th>
-                                                                <th><input type="text" name="search" style="height: calc(1.5em + 1.4rem + -8px)" class="form-control" placeholder="Masukkan Nama Barang" aria-label="Masukkan Nama Barang" id="search" onkeyup="tampil()"></th>
-                                                            </tr>
-                                                            <tr>
-                                                                <th><center>TAGIHAN</center></th>
-                                                                <th><span style="color: #28a745;text-align: right;font-size:18px;font-weight:bold"><b id="total_all2">{{ number_format($total,0,",",".") }}</b></span></th>
-                                                            </tr>
-                                                        </table>
+                                                        <div class="row">
+                                                            <div class="col-md-6" style="padding-top: 10px;">
+                                                                <div class="row">
+                                                                    <div class="col-md-4" style="padding-right: 0px;">
+                                                                        <a type="button" class="btn mb-2 btn-info btn-block" onclick="myFunction(this.name)" name="1">Uang Pas</a>
+                                                                    </div>
+                                                                    <div class="col-md-4" style="padding-right: 0px;" >
+                                                                        <a type="button" class="btn mb-2 btn-info btn-block" onclick="myFunction(this.name)" name="50">50</a>
+                                                                    </div>
+                                                                    <div class="col-md-4" style="padding-right: 0px;" >
+                                                                        <a type="button" class="btn mb-2 btn-info btn-block" onclick="myFunction(this.name)" name="100">100</a>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="row">
+                                                                    <div class="col-md-4" style="padding-right: 0px;">
+                                                                        <a type="button" class="btn mb-2 btn-info btn-block" onclick="myFunction(this.name)" name="200">200</a>
+                                                                    </div>
+                                                                    <div class="col-md-4" style="padding-right: 0px;" >
+                                                                        <a type="button" class="btn mb-2 btn-info btn-block" onclick="myFunction(this.name)" name="500">500</a>
+                                                                    </div>
+                                                                    <div class="col-md-4" style="padding-right: 0px;" >
+                                                                        <a type="button" class="btn mb-2 btn-info btn-block" onclick="myFunction(this.name)" name="1000">1.000</a>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="row">
+                                                                    <div class="col-md-4" style="padding-right: 0px;">
+                                                                        <a type="button" class="btn mb-2 btn-info btn-block" onclick="myFunction(this.name)" name="2000">2.000</a>
+                                                                    </div>
+                                                                    <div class="col-md-4" style="padding-right: 0px;" >
+                                                                        <a type="button" class="btn mb-2 btn-info btn-block" onclick="myFunction(this.name)" name="5000">5.000</a>
+                                                                    </div>
+                                                                    <div class="col-md-4" style="padding-right: 0px;" >
+                                                                        <a type="button" class="btn mb-2 btn-info btn-block" onclick="myFunction(this.name)" name="10000">10.000</a>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="row">
+                                                                    <div class="col-md-4" style="padding-right: 0px;">
+                                                                        <a type="button" class="btn mb-2 btn-info btn-block" onclick="myFunction(this.name)" name="20000">20.000</a>
+                                                                    </div>
+                                                                    <div class="col-md-4" style="padding-right: 0px;" >
+                                                                        <a type="button" class="btn mb-2 btn-info btn-block" onclick="myFunction(this.name)" name="50000">50.000</a>
+                                                                    </div>
+                                                                    <div class="col-md-4" style="padding-right: 0px;" >
+                                                                        <a type="button" class="btn mb-2 btn-info btn-block" onclick="myFunction(this.name)" name="100000">100.000</a>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="row">
+                                                                    <div class="col-md-6" style="padding-right: 0px;">
+                                                                        <a type="button" class="btn mb-2 btn-success btn-block" onclick="myFunction(this.name)" name="20000">Diskon (%)</a>
+                                                                    </div>
+                                                                    <div class="col-md-6" style="padding-right: 0px;" >
+                                                                        <a type="button" class="btn mb-2 btn-success btn-block" onclick="myFunction(this.name)" name="50000">Diskon (Rp)</a>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="row">
+                                                                    <div class="col-md-12" style="padding-right: 0px;">
+                                                                        <a type="button" class="btn mb-2 btn-danger btn-block" onclick="myFunction(this.name)" name="0">Reset</a>
+                                                                    </div>
+                                                                </div>
+
+                                                                <script type="text/javascript">
+                                                                    function myFunction(uang)
+                                                                    {
+                                                                        jumlah_bayar = document.getElementById("jumlah_bayar").value;
+                                                                        total_keseluruhan3 = document.getElementById("total_keseluruhan3").value;
+                    
+                                                                        if(uang==0){
+                                                                            jumlah_bayar2 = 0;
+                                                                        } else if(uang==1){
+                                                                            jumlah_bayar2 = total_keseluruhan3;
+                                                                        } else {
+                                                                            if(jumlah_bayar==""){
+                                                                                jumlah_bayar2 = uang;
+                                                                            } else {
+                                                                                jumlah_bayar2 = parseInt(jumlah_bayar) + parseInt(uang);
+                                                                            }
+                                                                        }
+                                                                        document.getElementById("jumlah_bayar").value=jumlah_bayar2;
+                                                                        
+                                                                        total_keseluruhan4 = parseInt(jumlah_bayar2) - parseInt(total_keseluruhan3);
+                                                                        total_keseluruhan4 = convertToRupiah(total_keseluruhan4);
+                                                                        if(jumlah_bayar2<=0){
+                                                                            document.getElementById("kembalian").textContent="0";
+                                                                        } else {
+                                                                            if(total_keseluruhan4<0){
+                                                                                document.getElementById("kembalian").style.color='red';
+                                                                            } else {
+                                                                                document.getElementById("kembalian").style.color='black';
+                                                                            }
+                                                                            document.getElementById("kembalian").textContent=total_keseluruhan4;
+                                                                        }
+
+                                                                    }
+                                                                </script>
+
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <table class="table">
+                                                                    <tr>
+                                                                        <th style="width: 30%;border-top: 0px solid #dee2e6;">JENIS PEMBAYARAN</th>
+                                                                        <th style="width: 70%;border-top: 0px solid #dee2e6;"><select class="form-control" name="jenis_pembayaran">
+                                                                                <option value="1">CASH</option>
+                                                                                <option value="2">DEBIT</option>
+                                                                                <option value="3">KREDIT</option>
+                                                                            </select>
+                                                                        </th>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th style="width: 30%;border-top: 0px solid #dee2e6;">TAGIHAN</th>
+                                                                        <th style="width: 70%;border-top: 0px solid #dee2e6;text-align: end;">
+                                                                            <span style="color: #28a745;text-align: right;font-size:18px;font-weight:bold;text-align:right;">
+                                                                                <b id="total_keseluruhan2">{{ number_format($total,0,",",".") }}</b>
+                                                                                <input type="hidden" id="total_keseluruhan3" value="{{ $total }}">
+                                                                            </span>
+                                                                        </th>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th style="width: 30%;border-top: 0px solid #dee2e6;">PEMBAYARAN</th>
+                                                                        <th style="width: 70%;border-top: 0px solid #dee2e6;">
+                                                                            <input type="text" name="search" style="height: calc(1.5em + 1.4rem + -8px);text-align: right;" class="form-control" id="jumlah_bayar" onkeyup="pembayaran();">
+                                                                        </th>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>KEMBALIAN</th>
+                                                                        <th style="text-align:right"><span style="color: #f44336;font-size:18px;font-weight:bold;"><b id="kembalian" style="">0</b></span></th>
+                                                                    </tr>
+                                                                </table>
+
+                                                                <script type="text/javascript">
+                                                                    function pembayaran()
+                                                                    {
+                                                                        jumlah_bayar = document.getElementById("jumlah_bayar").value;
+                                                                        total_keseluruhan3 = document.getElementById("total_keseluruhan3").value;
+                                                                        total_keseluruhan4 = parseInt(jumlah_bayar) - parseInt(total_keseluruhan3);
+                                                                        total_keseluruhan4 = convertToRupiah(total_keseluruhan4);
+                                                                        if(jumlah_bayar<=0){
+                                                                            document.getElementById("kembalian").textContent="0";
+                                                                        } else {
+                                                                            if(total_keseluruhan4<0){
+                                                                                document.getElementById("kembalian").style.color='red';
+                                                                            } else {
+                                                                                document.getElementById("kembalian").style.color='black';
+                                                                            }
+                                                                            document.getElementById("kembalian").textContent=total_keseluruhan4;
+                                                                        }
+
+                                                                    }
+                                                                </script>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Tutup</button>
