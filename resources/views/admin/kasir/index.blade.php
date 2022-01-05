@@ -22,10 +22,12 @@
 										  <a type="button" class="btn mb-2 mr-1 btn-info" data-toggle="modal" data-target="#exampleModal">Cari Barang</a>
 										</div>
 										<div class="col-xl-4 col-md-12 col-sm-12 col-12">
-											<div class="input-group" >
-											  <input type="text" name="barcode" style="height: calc(1.5em + 1.4rem + -8px)" class="form-control" placeholder="Masukkan Barcode" aria-label="Masukkan Barcode" autofocus>
-											</div>
+                                            <select class="form-control" name="barcode" id='barcode' style='width: 200px;' onkeyup="tampil()" autofocus >
+                                                <option value=''>- Pilih Barang -</option>
+                                            </select>
 										</div>
+                                        
+									<button type="submit" class="btn btn-success">Simpan</button>
 									</div>
 								</div>
 							</form>
@@ -90,7 +92,7 @@
 				                            @php $total = 0; @endphp
                                             @foreach($kasir as $v)
                                                 <tr>
-                                                    <td style="width: 5%">{{ ($kasir ->currentpage()-1) * $kasir ->perpage() + $loop->index + 1 }}</td>
+                                                    <td style="width: 5%">{{ $loop->index + 1 }}</td>
                                                     <td style="width: 10%"><b>{{ $v->barcode }}<b></td>
                                                     <td style="width: 30%"><b>{{ $v->nama_barang }}<b></td>
                                                     <td style="width: 15%"><b>{{ number_format($v->harga, 0, ',', '.') }}<b></td>
@@ -117,7 +119,6 @@
                                             </tr>
                                             </tbody>
                                         </table>
-                                        <div class="float-right">{{ $kasir->appends(Request::only('search'))->links() }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -139,6 +140,32 @@ function convertToRupiah(angka)
 	return rupiah.split('',rupiah.length-1).reverse().join('');
 
 }
+</script>
+<script type="text/javascript">
+   // CSRF Token
+   var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+   $(document).ready(function(){
+     $( "#barcode" ).select2({
+        ajax: { 
+          url: "{{url('barang/get')}}",
+          type: "post",
+          dataType: 'json',
+          delay: 250,
+          data: function (params) {
+            return {
+               _token: CSRF_TOKEN,
+               search: params.term // search term
+            };
+          },
+          processResults: function (response) {
+            return {
+              results: response
+            };
+          },
+          cache: true
+        }
+     });
+   });
 </script>
 <script>
 function tampil(){

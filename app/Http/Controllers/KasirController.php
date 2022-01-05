@@ -20,8 +20,9 @@ class KasirController extends Controller
     public function index()
     {
         $title = 'DATA TRANSAKSI';
+        $barang = Barang::get();
         $kasir = Kasir::whereNull('status')->orderBy('id','DESC')->get();
-		return view('admin.kasir.index2',compact('title','kasir'));
+		return view('admin.kasir.index2',compact('title','kasir','barang'));
     }
 
 	## Tampilkan Data Search
