@@ -15,17 +15,15 @@
                                 </div>
                             </div>
                             <div class="widget-content widget-content-area" style="padding-top: 0px;">
-					   <form action="{{ url('/'.Request::segment(1)) }}" method="POST" enctype="multipart/form-data" class="form-horizontal">
+					            <form action="{{ url('/'.Request::segment(1)) }}" method="POST" enctype="multipart/form-data" class="form-horizontal">
 								{{ csrf_field() }}
 									
-									<div class="form-group row mb-4">
-										<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">Nama Kategori  <span class="required" style="color: #dd4b39;">*</span></label>
-										<div class="col-xl-9 col-lg-9 col-sm-10">
-											<input type="text" class="form-control" name="nama_kategori" value="{{ old('nama_kategori') }}">
-											@if ($errors->has('nama_kategori')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('nama_kategori') }}</div>@endif
-										</div>
-									</div>
-									
+                                    <div class="form-group">
+                                        <label for="exampleFormControlInput1">{{ __('Nama Kategori') }}  <span class="required" style="color: #dd4b39;">*</span></label>
+                                        <input type="text" class="form-control" name="nama_kategori" value="{{ old('nama_kategori') }}">
+                                        @if ($errors->has('nama_kategori')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('nama_kategori') }}</div>@endif
+                                    </div> 
+
 									<button type="submit" class="btn btn-success">Simpan</button>
 									<button type="reset" class="btn btn-warning">Reset</button>
 									<a href="{{ url('/'.Request::segment(1)) }}" class="btn btn-danger">Kembali</a>

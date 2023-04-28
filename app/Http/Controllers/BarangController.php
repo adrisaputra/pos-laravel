@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Barang;   //nama model
 use App\Models\Kategori;   //nama model
 use App\Models\Satuan;   //nama model
+use App\Models\Gudang;   //nama model
 use App\Imports\BarangImport;     // Import data Pegawai
 use Maatwebsite\Excel\Facades\Excel; // Excel Library
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB; //untuk membuat query di controller
 use Illuminate\Support\Facades\Auth;
+use Image;
 
 class BarangController extends Controller
 {
@@ -62,22 +64,44 @@ class BarangController extends Controller
             'barcode' => 'required',
             'nama_barang' => 'required',
             'satuan_id' => 'required',
-            'stok_awal' => 'required',
             'harga_beli' => 'required',
             'harga_jual' => 'required',
+            'min_stok' => 'required',
+            'full_stok' => 'required',
+            'gambar' => 'mimes:jpg,jpeg,png|max:500',
         ]);
 
-		$input['barcode'] = $request->barcode;
-		$input['nama_barang'] = $request->nama_barang;
-		$input['kategori_id'] = $request->kategori_id;
-		$input['satuan_id'] = $request->satuan_id;
-		$input['stok_awal'] = str_replace(".", "", $request->stok_awal);
-		$input['harga_beli'] = str_replace(".", "", $request->harga_beli);
-		$input['harga_jual'] = str_replace(".", "", $request->harga_jual);
-		$input['user_id'] = Auth::user()->id;
+        
+        $barang = new Barang();
+		$barang->barcode = $request->barcode;
+		$barang->nama_barang = $request->nama_barang;
+		$barang->kategori_id = $request->kategori_id;
+		$barang->satuan_id = $request->satuan_id;
+		$barang->harga_beli = str_replace(".", "", $request->harga_beli);
+		$barang->harga_jual = str_replace(".", "", $request->harga_jual);
+
+        if ($request->file('gambar')) {
+            $barang->gambar = time() . '.' . $request->file('gambar')->getClientOriginalExtension();
+
+            $request->file('gambar')->storeAs('public/upload/barang', $barang->gambar);
+            $request->file('gambar')->storeAs('public/upload/barang/thumbnail', $barang->gambar);
+
+            $thumbnailpath = public_path('storage/upload/barang/thumbnail/' . $barang->gambar);
+            $img = Image::make($thumbnailpath)->resize(400, 150, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+            $img->save($thumbnailpath);
+        }
+
+		$barang->user_id = Auth::user()->id;
+        $barang->save();
 		
-        Barang::create($input);
-		
+        $gudang = new Gudang();
+        $gudang->barang_id = $barang->id;
+        $gudang->min_stok = str_replace(".", "", $request->min_stok);
+        $gudang->full_stok = str_replace(".", "", $request->full_stok);
+        $gudang->save();
+
 		return redirect('/barang')->with('status','Data Tersimpan');
     }
 
@@ -87,7 +111,8 @@ class BarangController extends Controller
         $title = 'UBAH DATA BARANG';
         $kategori = Kategori::get();
         $satuan = Satuan::get();
-        $view=view('admin.barang.edit', compact('title','barang','kategori','satuan'));
+        $gudang = Gudang::where('barang_id', $barang->id)->first();
+        $view=view('admin.barang.edit', compact('title','barang','kategori','satuan','gudang'));
         $view=$view->render();
         return $view;
     }
@@ -99,18 +124,49 @@ class BarangController extends Controller
             'barcode' => 'required',
             'nama_barang' => 'required',
             'satuan_id' => 'required',
-            'stok_awal' => 'required',
             'harga_beli' => 'required',
             'harga_jual' => 'required',
+            'min_stok' => 'required',
+            'full_stok' => 'required',
+            'gambar' => 'mimes:jpg,jpeg,png|max:500',
         ]);
+        
+        if ($barang->gambar && $request->file('gambar') != "") {
+            $image_path = public_path() . '/storage/upload/barang/thumbnail/' . $barang->image;
+            $image_path2 = public_path() . '/storage/upload/gambar/' . $barang->image;
+            unlink($image_path);
+            unlink($image_path2);
+        }
 
         $barang->fill($request->all());
-		$barang->stok_awal = str_replace(".", "", $request->stok_awal);
+
+        if ($request->file('gambar')) {
+
+            $filename = time() . '.' . $request->file('gambar')->getClientOriginalExtension();
+
+            $request->file('gambar')->storeAs('public/upload/gambar', $filename);
+            $request->file('gambar')->storeAs('public/upload/gambar/thumbnail', $filename);
+
+            $thumbnailpath = public_path('storage/upload/gambar/thumbnail/' . $filename);
+            $img = Image::make($thumbnailpath)->resize(400, 150, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+            $img->save($thumbnailpath);
+
+            $barang->image = $filename;
+        }
+
 		$barang->harga_beli = str_replace(".", "", $request->harga_beli);
 		$barang->harga_jual = str_replace(".", "", $request->harga_jual);
 		$barang->user_id = Auth::user()->id;
     	$barang->save();
 		
+        $gudang = Gudang::where('barang_id', $barang->id)->first();
+        $gudang = Gudang::find($gudang->id);
+        $gudang->min_stok = str_replace(".", "", $request->min_stok);
+        $gudang->full_stok = str_replace(".", "", $request->full_stok);
+        $gudang->save();
+
 		return redirect('/barang')->with('status', 'Data Berhasil Diubah');
     }
 
@@ -135,8 +191,8 @@ class BarangController extends Controller
 		$nama_file = rand().$file->getClientOriginalName();
  
 		// upload ke folder file_siswa di dalam folder public
-		$file->move('upload/file_barang',$nama_file);
- 
+		$file->move('public/upload/file_barang',$nama_file);
+
 		// import data
 		Excel::import(new BarangImport, public_path('upload/file_barang/'.$nama_file));
  

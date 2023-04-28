@@ -19,14 +19,12 @@
 							{{ csrf_field() }}
 							<input type="hidden" name="_method" value="PUT">
 
-								<div class="form-group row mb-4">
-									<label class="col-xl-3 col-sm-3 col-sm-2 col-form-label">Nama Satuan  <span class="required" style="color: #dd4b39;">*</span></label>
-									<div class="col-xl-9 col-lg-9 col-sm-10">
-										<input type="text" class="form-control" name="nama_satuan" value="{{ $satuan->nama_satuan }}">
-										@if ($errors->has('nama_satuan')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('nama_satuan') }}</div>@endif
-									</div>
-								</div>
-								
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">{{ __('Nama Satuan') }}  <span class="required" style="color: #dd4b39;">*</span></label>
+                                    <input type="text" class="form-control" name="nama_satuan" value="{{ $satuan->nama_satuan }}">
+                                    @if ($errors->has('nama_satuan')) <div class="invalid-feedback" style="display: block;">{{ $errors->first('nama_satuan') }}</div>@endif
+                                </div> 
+
 								<button type="submit" class="btn btn-success">Simpan</button>
 								<button type="reset" class="btn btn-warning">Reset</button>
 								<a href="{{ url('/'.Request::segment(1)) }}" class="btn btn-danger">Kembali</a>

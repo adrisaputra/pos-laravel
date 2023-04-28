@@ -13,7 +13,7 @@
     <link href="{{ asset('assets/css/loader.css') }}" rel="stylesheet" type="text/css" />
     <script src="{{ asset('assets/js/loader.js') }}"></script>
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
-    <link href="https://fonts.googleapis.com/css?family=Quicksand:400,500,600,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
     <link href="{{ asset('bootstrap/css/bootstrap.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/plugins.css') }}" rel="stylesheet" type="text/css" />
     <!-- END GLOBAL MANDATORY STYLES -->
@@ -163,33 +163,28 @@
                             </div>
                         </a>
                     </li>
-                    <li class="menu {{ (request()->is('supplier*')) ? 'active' : '' }}">
-                        <a href="{{ url('/supplier') }}" aria-expanded="{{ (request()->is('supplier*')) ? 'true' : '' }}" class="dropdown-toggle">
-                            <div class="">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
-                                <span>Supplier</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="menu {{ (request()->is('barang*')||request()->is('kategori*')||request()->is('satuan*')) ? 'active' : '' }}">
-                        <a href="#components" data-toggle="collapse" aria-expanded="{{ (request()->is('barang*')||request()->is('kategori*')||request()->is('satuan*')) ? 'true' : '' }}" class="dropdown-toggle">
+                    <li class="menu {{ (request()->is('barang*')||request()->is('kategori*')||request()->is('gudang*')||request()->is('satuan*')||request()->is('supplier*')) ? 'active' : '' }}">
+                        <a href="#components" data-toggle="collapse" aria-expanded="{{ (request()->is('barang*')||request()->is('kategori*')||request()->is('gudang*')||request()->is('satuan*')||request()->is('supplier*')) ? 'true' : '' }}" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-                                <span>Produk</span>
+                                <span>Manajemen Stok</span>
                             </div>
                             <div>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
                             </div>
                         </a>
-                        <ul class="collapse submenu list-unstyled {{ (request()->is('barang*')||request()->is('kategori*')||request()->is('satuan*')) ? 'show' : '' }}" id="components" data-parent="#accordionExample">
+                        <ul class="collapse submenu list-unstyled {{ (request()->is('barang*')||request()->is('kategori*')||request()->is('gudang*')||request()->is('satuan*')||request()->is('supplier*')) ? 'show' : '' }}" id="components" data-parent="#accordionExample">
                             <li class="{{ (request()->is('barang*')) ? 'active' : '' }}">
-                                <a href="{{ url('/barang') }}"> Barang </a>
+                                <a href="{{ url('/barang') }}"> Produk </a>
                             </li>
                             <li class="{{ (request()->is('kategori*')) ? 'active' : '' }}">
                                 <a href="{{ url('/kategori') }}"> Kategori </a>
                             </li>
-                            <li class="{{ (request()->is('satuan*')) ? 'active' : '' }}">
-                                <a href="{{ url('/satuan') }}"> Satuan </a>
+                            <li class="{{ (request()->is('gudang*')) ? 'active' : '' }}">
+                                <a href="{{ url('/gudang') }}"> Gudang </a>
+                            </li>
+                            <li class="{{ (request()->is('supplier*')) ? 'active' : '' }}">
+                                <a href="{{ url('/supplier') }}"> Supplier </a>
                             </li>
                         </ul>
                     </li>
@@ -287,6 +282,8 @@
     <script src="{{ asset('plugins/select2/select2.min.js') }}"></script>
     <script src="{{ asset('plugins/select2/custom-select2.js') }}"></script>
     <script src="{{ asset('assets/js/dashboard/dash_1.js') }}"></script>
+    <script src="{{ asset('plugins/sweetalerts/sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('plugins/sweetalerts/custom-sweetalert.js') }}"></script>
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
 
 </body>

@@ -49,9 +49,10 @@ class BarangImport implements ToCollection, WithStartRow
                 'kategori_id' => $kategori, 
                 'satuan_id' => $satuan, 
                 'diskon' => $row[4], 
-                'stok_awal' => str_replace(".", "", $row[5]), 
-                'harga_beli' => str_replace(".", "", $row[6]), 
-                'harga_jual' => str_replace(".", "", $row[7]), 
+                'min_stok' => str_replace(".", "", $row[5]), 
+                'max_stok' => str_replace(".", "", $row[6]), 
+                'harga_beli' => str_replace(".", "", $row[7]), 
+                'harga_jual' => str_replace(".", "", $row[8]), 
                 'user_id' => Auth::user()->id
             ]);
 

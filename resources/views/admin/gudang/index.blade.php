@@ -18,12 +18,11 @@
 								<div class="widget-content widget-content-area">
 									<div class="row">
 										<div class="col-xl-8 col-md-12 col-sm-12 col-12">
-										  <a href="{{ url('/'.Request::segment(1).'/create') }}" class="btn mb-2 mr-1 btn-success">Tambah Data</a>
 										  <a href="{{ url('/'.Request::segment(1)) }}" class="btn mb-2 mr-1 btn-warning">Refresh</a>
 										</div>
 										<div class="col-xl-4 col-md-12 col-sm-12 col-12">
 											<div class="input-group" >
-											  <input type="text" name="search" style="height: calc(1.5em + 1.4rem + -8px)" class="form-control" placeholder="Masukkan Nama Kategori" aria-label="Masukkan Nama Kategori" id="search" onkeyup="tampil()">
+											  <input type="text" name="search" style="height: calc(1.5em + 1.4rem + -8px)" class="form-control" placeholder="Masukkan Pencarian" aria-label="Masukkan Pencarian" id="search" onkeyup="tampil()">
 											  <!-- <div class="input-group-append">
 												<input class="btn btn-primary" type="submit" name="submit" value="Cari">
 											  </div> -->
@@ -49,26 +48,38 @@
                                             <thead>
                                                 <tr>
                                                     <th style="width: 60px">No</th>
-                                                    <th>Nama Kategori</th>
-                                                    <th style="width: 150px">Aksi</th>
+                                                    <th>Kode Produk</th>
+                                                    <th>Nama Produk</th>
+                                                    <th>Tersedia</th>
+                                                    <th>Stok Minimal</th>
+                                                    <th>Stok Maksimal</th>
+                                                    <th>Status Stok</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach($kategori as $v)
-                                                <tr>
-                                                    <td>{{ ($kategori ->currentpage()-1) * $kategori ->perpage() + $loop->index + 1 }}</td>
-                                                    <td>{{ $v->nama_kategori }}</td>
-                                                    <td class="text-center">
-                                                        <ul class="table-controls">
-                                                            <li><a href="{{ url('/'.Request::segment(1).'/edit/'.$v->id ) }}" data-toggle="tooltip" data-placement="top" title="Edit"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 text-success"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg></a></li>
-                                                            <li><a class="warning confirm" onclick="DeleteData(this.id)" id="{{ $v->id }}"  title="Delete"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 text-danger"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a></li>
-                                                        </ul>
+                                            @foreach ($gudang as $v)
+                                            @php
+                                            $percent = round(($v->in_stok / $v->full_stok) * 100);
+                                            $color = 'grey';
+                                            $stock_color = '';
+                                            if($v->in_stok < $v->min_stok) $stock_color = 'red-text';
+                                                if ($percent < 33) $color='bg-danger' ; elseif ($percent < 66) $color='bg-warning' ; else $color='bg-success' ; @endphp <tr>
+                                                    <td>{{ ($gudang->currentpage() - 1) * $gudang->perpage() + $loop->index + 1 }}</td>
+                                                    <td>{{ $v->barang->barcode }}</td>
+                                                    <td>{{ $v->barang->nama_barang }}</td>
+                                                    <td class="{{ $stock_color }}"><b>{{ $v->in_stok }}</b></td>
+                                                    <td>{{ $v->min_stok }}</td>
+                                                    <td>{{ $v->full_stok }}</td>
+                                                    <td>
+                                                        <div class="progress br-30" style="height: 25px;">
+                                                            <div class="progress-bar {{ $color }}" role="progressbar" style="width: {{ $percent }}%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">{{ $percent }}%</div>
+                                                        </div>
                                                     </td>
-                                                </tr>
+                                                    </tr>
                                             @endforeach
                                             </tbody>
                                         </table>
-                                        <div class="float-right">{{ $kategori->appends(Request::only('search'))->links() }}</div>
+                                        <div class="float-right">{{ $gudang->appends(Request::only('search'))->links() }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -80,7 +91,7 @@
 <script>
 function tampil(){
     search = document.getElementById("search").value;
-    url = "{{ url('/kategori/search') }}"
+    url = "{{ url('/gudang/search') }}"
     $.ajax({
         url:""+url+"?search="+search+"",
         success: function(response){
@@ -89,36 +100,5 @@ function tampil(){
     });
     return false;
 }
-</script>
-<script>
-    function DeleteData(id) {
-
-        $('.widget-content .warning.confirm').on('click', function () {
-        swal({
-            title: 'Apakah Kamu Yakin?',
-            text: "Anda tidak akan dapat mengembalikan ini!",
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Delete',
-            padding: '2em'
-            }).then(function(result) {
-            if (result.value) {
-                    swal(
-                    'Deleted!',
-                    'Data Kategori Berhasil Dihapus.',
-                    'success'
-                    ).then(function() {
-                        url = "{{ url('/kategori/hapus') }}"
-                        $.ajax({
-                            url:""+url+"/"+id+"",
-                            success: function(response){
-                                location.reload();
-                            }
-                        });
-					});
-            }
-            })
-        })
-    }
 </script>
 @endsection

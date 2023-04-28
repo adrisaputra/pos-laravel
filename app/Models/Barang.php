@@ -15,10 +15,17 @@ class Barang extends Model
         'kategori_id',
         'satuan_id',
         'diskon',
-        'stok_awal',
         'harga_beli',
         'harga_jual',
+        'gambar',
         'user_id'
     ];
+
+    
+    public function gudang()
+    {
+        return $this->hasOne('App\Models\Gudang');
+    }
+
 
 }

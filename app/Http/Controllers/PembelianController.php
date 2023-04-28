@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pembelian;   //nama model
-use App\Models\Barang;   //nama model
-use App\Models\Supplier;   //nama model
-use App\Imports\PembelianImport;     // Import data Pegawai
-use Maatwebsite\Excel\Facades\Excel; // Excel Library
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB; //untuk membuat query di controller
+use App\Models\Barang;
+use App\Models\Pembelian;
+use App\Models\DetailPembelian;
+use App\Models\Supplier;
+use App\Models\Gudang;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class PembelianController extends Controller
@@ -18,130 +18,219 @@ class PembelianController extends Controller
     {
         $this->middleware('auth');
     }
-	
-    ## Tampikan Data
+
     public function index()
     {
-        $title = 'DATA PEMBELIAN';
-        $pembelian = Pembelian::orderBy('id','DESC')->paginate(25)->onEachSide(1);
-		return view('admin.pembelian.index',compact('title','pembelian'));
+        $title = "Pembelian";
+        $supplier = Supplier::all();
+        $pembelian =  Pembelian::where("status", 'PO')->orderBy('id', 'DESC')->paginate(25)->onEachSide(1);
+
+        return view('admin.pembelian.index', compact('title', 'pembelian', 'supplier'));
     }
 
-	## Tampilkan Data Search
-	public function search(Request $request)
+    ## Tampilkan Data Search
+    public function search(Request $request)
     {
-        $title = 'DATA PEMBELIAN';
-        $pembelian = $request->get('search');
-        $pembelian = Pembelian::where(function ($query) use ($pembelian) {
-                                    $query->where('barcode', 'LIKE', '%'.$pembelian.'%')
-                                        ->orWhere('nama_barang', 'LIKE', '%'.$pembelian.'%');
-                                })->orderBy('id','DESC')->paginate(25)->onEachSide(1);
-        
-        if($request->input('page')){
-            return view('admin.pembelian.index',compact('title','pembelian'));
-        } else {
-            return view('admin.pembelian.search',compact('title','pembelian'));
-        }
+        $title = "Pembelian";
+        $supplier = Supplier::all();
+        $search = $request->get('search');
+        $pembelian = Pembelian::where("status", 'PO')
+            ->whereHas('user', function ($q) {
+                $q->where('outlet_id', Auth::user()->outlet_id);
+            })
+            ->where(function ($query) use ($search) {
+                $query->where(function ($query) use ($search) {
+                    $query->where('transaction_number', 'LIKE', '%' . $search . '%')
+                        ->orWhere('pay_cost', 'LIKE', '%' . $search . '%')
+                        ->orWhere('total_price', 'LIKE', '%' . $search . '%')
+                        ->orWhere('transaction_date', 'LIKE', '%' . $search . '%');
+                })
+                    ->orwhereHas('user', function ($query) use ($search) {
+                        $query->where('qname', 'LIKE', '%' . $search . '%');
+                    })
+                    ->orWhereHas('supplier', function ($query) use ($search) {
+                        $query->where('supplier_name', 'LIKE', '%' . $search . '%');
+                    });
+            })->orderBy('id', 'DESC')->paginate(25)->onEachSide(1);
+
+        return view('admin/preorder/index', compact('title', 'pembelian', 'supplier'));
     }
-	
+
     ## Tampilkan Form Create
     public function create()
     {
-        $title = 'TAMBAH DATA PEMBELIAN';
-        $barang = Barang::get();
-        $supplier = Supplier::get();
-		$view=view('admin.pembelian.create',compact('title','barang','supplier'));
-        $view=$view->render();
+        $title = "Pembelian";
+        $barang = Barang::where('status', 1)->orderBy('id', 'DESC')->limit(20)->get();
+        $supplier = Supplier::all();
+        $detail_pembelian = DetailPembelian::whereHas('pembelian', function ($query) {
+            $query->where('status', 'CART');
+        })->orderBy('id', 'DESC')->get();
+        $pembelian = pembelian::where('status', 'CART')->first();
+
+        if (!$pembelian) {
+            $index = Pembelian::count() + 1;
+            Pembelian::create([
+                "nomor_transaksi" => ('PO-' . time() . $index),
+                "status_id" => 4, //successfully
+                "user_id" => Auth::user()->id, //admin
+                "supplier_id" => 1, //
+            ]);
+        }
+
+        $pembelian = pembelian::where('status', 'CART')->first();
+
+        $view = view('admin.preorder.create', compact('title', 'barang', 'supplier', 'detail_pembelian', 'pembelian'));
+        $view = $view->render();
         return $view;
     }
 
-    ## Simpan Data
-    public function store(Request $request)
+    public function search_box_po(Request $request)
     {
-        $this->validate($request, [
-            'tanggal' => 'required',
-            'barcode' => 'required',
-            'jumlah' => 'required'
-        ]);
+        $barang = $request->get('search');
+        $barang = Barang::where('status', 1)->where('outlet_id', Auth::user()->outlet_id)->where(function ($query) use ($barang) {
+            $query->where('code', 'LIKE', '%' . $barang . '%')
+                ->orWhere('barang_name', 'LIKE', '%' . $barang . '%');
+        })->orderBy('id', 'DESC')->limit(25)->get();
 
-		$input['tanggal'] = $request->tanggal;
-		$input['barcode'] = $request->barcode;
-		$input['supplier_id'] = $request->supplier_id;
-        
-        $barang = Barang::where('barcode',$request->barcode)->first();
-		$input['nama_barang'] = $barang->nama_barang;
-		$input['kategori_id'] = $barang->kategori_id;
-		$input['satuan_id'] = $barang->satuan_id;
-        
-		$input['jumlah'] = str_replace(".", "", $request->jumlah);
-		$input['catatan'] = $request->catatan;
-		$input['user_id'] = Auth::user()->id;
-		
-        Pembelian::create($input);
-		
-		return redirect('/pembelian')->with('status','Data Tersimpan');
+        return view('admin.preorder.barang_search', compact('barang'));
     }
 
-    ## Tampilkan Form Edit
-    public function edit(Pembelian $pembelian)
+    public function get_modal_data_po(Request $request)
     {
-        $title = 'UBAH DATA PEMBELIAN';
-        $barang = Barang::get();
-        $supplier = Supplier::get();
-        $view=view('admin.pembelian.edit', compact('title','pembelian','barang','supplier'));
-        $view=$view->render();
-        return $view;
+        $barang = $request->get('id');
+        $barang = Barang::where('status', 1)->where('outlet_id', Auth::user()->outlet_id)->where('id', $barang)->first();
+        $detail_pembelian = DetailPembelian::where('barang_id', $barang->id)
+            ->whereHas('pembelian', function ($query) {
+                $query->where('status', 'CART');
+            })->first();
+        $pembelian = Pembelian::with("user", "supplier")
+            ->where("status", 'CART')->first();
+
+        return view('admin.preorder.modal_barang', compact('barang', 'pembelian', 'detail_pembelian'));
     }
 
-    ## Edit Data
-    public function update(Request $request, Pembelian $pembelian)
+    public function refresh()
     {
-        $this->validate($request, [
-            'tanggal' => 'required',
-            'barcode' => 'required',
-            'jumlah' => 'required'
-        ]);
+        $detail_pembelian = DetailPembelian::whereHas('pembelian', function ($query) {
+            $query->where('status', 'CART');
+        })->orderBy('id', 'DESC')->get();
 
-        $pembelian->fill($request->all());
-        $barang = Barang::where('barcode',$request->barcode)->first();
-		$pembelian->nama_barang = $barang->nama_barang;
-		$pembelian->kategori_id = $barang->kategori_id;
-		$pembelian->satuan_id = $barang->satuan_id;
-        
-		$pembelian->jumlah = str_replace(".", "", $request->jumlah);
-		$pembelian->user_id = Auth::user()->id;
-    	$pembelian->save();
-		
-		return redirect('/pembelian')->with('status', 'Data Berhasil Diubah');
+        return view('admin.preorder.refresh', compact('detail_pembelian'));
+    }
+
+    public function add_to_cart_po(Request $request)
+    {
+        $purchase = DetailPembelian::where('purchase_transaction_id', $request->purchase_transaction_id)
+            ->where('barang_id', $request->barang_id);
+
+        $barang = Barang::find($request->barang_id);
+
+        $cek = $purchase->count();
+
+        if ($cek) { //if barang already in cart
+            $data = $purchase->first(); //get purchase row
+
+            //update cart in purchase 
+            $data->amount = $request->amount;
+            $data->price = $barang->purchase_price * $request->amount;
+            $data->save();
+        } else {
+            $input['purchase_transaction_id'] = $request->purchase_transaction_id;
+            $input['barang_id'] = $request->barang_id;
+            $input['amount'] = $request->amount;
+            $input['price'] =  $barang->purchase_price * $request->amount;
+            DetailPembelian::create($input);
+        }
+    }
+
+    function delete_item_po(Request $request)
+    {
+        DetailPembelian::find($request['id'])->delete();
+    }
+
+
+    public static function order(Request $request)
+    {
+        $Pembelian = Pembelian::find($request->purchase_transaction_id);
+        $Pembelian->status = 'PO';
+        // $Pembelian->user_id =  Auth::user()->id;
+        $Pembelian->supplier_id = $request->supplier_id;
+        $Pembelian->total_price = $request->total_price;
+        $Pembelian->save();
     }
 
     ## Hapus Data
-    public function delete(Pembelian $pembelian)
+    public function delete(Pembelian $purchase_transaction)
     {
-        $pembelian->delete();
-        return redirect('/pembelian')->with('status', 'Data Berhasil Dihapus');
+
+        $purchase_transaction->delete();
+
+        activity()->log('Hapus Data PO dengan ID = ' . $purchase_transaction->id);
+        return redirect('/preorder')->with('status', 'Data Berhasil Dihapus');
     }
 
-    public function import_excel(Request $request) 
-	{
-		// validasi
-		$this->validate($request, [
-			'file' => 'required|mimes:csv,xls,xlsx'
-		]);
- 
-		// menangkap file excel
-		$file = $request->file('file');
- 
-		// membuat nama file unik
-		$nama_file = rand().$file->getClientOriginalName();
- 
-		// upload ke folder file_siswa di dalam folder public
-		$file->move('upload/file_pembelian',$nama_file);
- 
-		// import data
-		Excel::import(new PembelianImport, public_path('upload/file_pembelian/'.$nama_file));
- 
-        return redirect('/pembelian')->with('status', 'Data Barang Berhasil Diimport');
-	}
+    ## Confirm Form View
+    public function confirm($id)
+    {
+        $title = "Konfirmasi Pre Order";
+        $pembelian = Pembelian::find($id);
+        $detail_pembelian = DetailPembelian::with('barang')->where('purchase_transaction_id', $id)->get();
+        // dd($detail_pembelian);
+        $view = view('admin.preorder.confirm', compact('title', 'detail_pembelian', 'pembelian'));
+        $view = $view->render();
+        return $view;
+    }
 
+    public function confirm_ship(Request $request)
+    {
+        // dd($request);
+        // return 0;    
+        $purchase_transaction_id = $request['purchase_transaction_id'];
+        $purchase_detail_id = $request['id'];
+        $barang_id = $request['barang_id'];
+        $amount = $request['amount'];
+        $purchase_price = $request['purchase_price'];
+        $selling_price = $request['selling_price'];
+
+        $total_price = 0;
+        foreach ($purchase_detail_id as  $i => $id) {
+
+            $this->validate($request, [
+                'selling_price.*' => 'required|numeric',
+            ]);
+            
+            // UPDATE PRODUCT PRICE
+            $barang =  Barang::find($barang_id[$i]);
+            $barang->purchase_price = $purchase_price[$i];
+            $barang->selling_price = $selling_price[$i];
+            $barang->save();
+
+            // UPDATE PURCHASE DETAIL
+            // if ($amount[$i] > 0) {
+            $purchase = DetailPembelian::find($id);
+            $purchase->amount = $amount[$i];
+            $purchase->price = $amount[$i] * $purchase_price[$i];
+            $purchase->save();
+            // } else
+            //     $purchase = DetailPembelian::find($id)->delete();
+
+            // STORE TO INVENTORY
+            $inventory =  Inventory::where('barang_id', $barang_id[$i])->first();
+            $inventory->in_stock = $inventory->in_stock + $amount[$i];
+            $inventory->save();
+
+            // SUM TOTAL PRICE
+            $total_price += $amount[$i] * $purchase_price[$i];
+        }
+
+        // UPDATE TRANSACTION
+        $purchase_transaction = Pembelian::find($purchase_transaction_id);
+        $purchase_transaction->transaction_number   = 'TRX' . time()  . $i;
+        $purchase_transaction->pay_cost             = $total_price;
+        $purchase_transaction->total_price          = $total_price;
+        $purchase_transaction->status               = 'DONE';
+        $purchase_transaction->save();
+
+        return redirect('/preorder')->with('status', 'Data Berhasil Dikonfirmasi');
+    }
 }

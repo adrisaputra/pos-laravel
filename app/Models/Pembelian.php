@@ -10,19 +10,16 @@ class Pembelian extends Model
       // use HasFactory;
 	protected $table = 'pembelian_tbl';
 	protected $fillable =[
-        'tanggal',
-        'barcode',
-        'nama_barang',
-        'kategori_id',
-        'satuan_id',
+        'nomor_transaksi',
+        'status',
+        'user_id',
         'supplier_id',
-        'jumlah',
-        'catatan',
-        'user_id'
+        'pembayaran',
+        'total',
     ];
 
-    public function satuan()
+    public function detail_pembelian()
     {
-        return $this->belongsTo('App\Models\Satuan');
+        return $this->hasMany(DetailPembelian::class, 'detail_pembelian_id');
     }
 }

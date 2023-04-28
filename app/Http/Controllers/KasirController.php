@@ -103,8 +103,8 @@ class KasirController extends Controller
             $kasir2->save();
         }
 		
-		
 		return redirect('/kasir')->with('status','Data Tersimpan');
+        
     }
 
     ## Edit Data
@@ -129,6 +129,11 @@ class KasirController extends Controller
     ## Hapus Data
     public function delete(Kasir $kasir)
     {
+        // $title = 'DATA TRANSAKSI';
+        // $kasir->delete();
+        // $barang = Barang::get();
+        // $kasir = Kasir::whereNull('status')->orderBy('id','DESC')->get();
+        // return view('admin.kasir.refresh',compact('title','kasir','barang'));
         $kasir->delete();
         return redirect('/kasir')->with('status', 'Data Berhasil Dihapus');
     }

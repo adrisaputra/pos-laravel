@@ -10,6 +10,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\SatuanController;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\GudangController;
 use App\Http\Controllers\PembelianController;
 use App\Http\Controllers\ReturController;
 use App\Http\Controllers\KasirController;
@@ -89,6 +90,10 @@ Route::post('/logout-sistem', [LoginController::class, 'logout']);
     Route::get('/barang/hapus/{barang}',[BarangController::class, 'delete']);
     Route::post('/barang/import_excel', [BarangController::class, 'import_excel']);
 
+    ## Gudang
+    Route::get('/gudang', [GudangController::class, 'index']);
+    Route::get('/gudang/search', [GudangController::class, 'search']);
+
     ## Pembelian
     Route::get('/pembelian', [PembelianController::class, 'index']);
     Route::get('/pembelian/search', [PembelianController::class, 'search']);
@@ -111,6 +116,7 @@ Route::post('/logout-sistem', [LoginController::class, 'logout']);
 
     ## Kasir
     Route::get('/kasir', [KasirController::class, 'index']);
+    Route::get('/kasir/refresh', [KasirController::class, 'refresh']);
     Route::get('/kasir/search', [KasirController::class, 'search']);
     Route::get('/kasir/create', [KasirController::class, 'create']);
     Route::put('/kasir/edit/{kasir}', [KasirController::class, 'update']);
@@ -118,7 +124,6 @@ Route::post('/logout-sistem', [LoginController::class, 'logout']);
     Route::post('/kasir', [KasirController::class, 'store']);
     Route::get('/kasir/hapus/{kasir}',[KasirController::class, 'delete']);
     Route::get('/kasir/nomor_invoice', [KasirController::class, 'nomor_invoice']);
-
 
     ## Profil
     Route::get('/profil', [ProfilController::class, 'index']);
